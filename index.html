@@ -19,7 +19,7 @@
   --text-main: #f1f5f9;
   --text-muted: #94a3b8;
   --border: rgba(255, 255, 255, 0.06);
-  --border-active: rgba(163, 230, 53, 0.2);
+  --border-active: rgba(163, 230, 53, 0.3);
   --radius-xl: 40px;
   --radius-lg: 24px;
   --radius-md: 16px;
@@ -146,48 +146,77 @@ nav {
 .hg-item video { width: 100%; height: 100%; object-fit: cover; }
 .hg-main { display: none; }
 
-/* ── SEÇÃO PROCESSOS EM VÍDEO (RECALIBRADA SEM ESPAÇOS BRANCOS) ── */
+/* ── SEÇÃO PROCESSOS EM VÍDEO (CARROSSEL) ── */
 .process-section {
-  padding: 60px 20px;
+  padding: 60px 0;
   background: var(--dark-bg);
+  position: relative;
 }
-.process-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  max-width: 500px;
+.carousel-wrapper {
+  position: relative;
+  max-width: 340px;
   margin: 0 auto;
+  padding: 0 16px;
+  overflow: hidden;
+}
+.carousel-container {
+  display: flex;
+  transition: transform 0.5s var(--ease);
+  width: 100%;
 }
 .process-card {
+  flex: 0 0 100%;
   position: relative;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid var(--border);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  border: 2px solid var(--border-active);
+  box-shadow: 0 0 25px rgba(163, 230, 53, 0.15), 0 20px 40px rgba(0,0,0,0.4);
   background: var(--dark-surface);
+  aspect-ratio: 9/16;
 }
 .process-card video {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
   object-fit: cover;
 }
 .process-label {
   position: absolute;
   bottom: 16px;
-  left: 16px;
-  background: rgba(11, 15, 25, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  left: 12px;
+  right: 12px;
+  background: rgba(11, 15, 25, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: var(--white);
-  padding: 8px 16px;
-  border-radius: var(--radius-pill);
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
-  font-size: 0.8rem;
-  letter-spacing: 0.02em;
+  font-size: 0.75rem;
   border: 1px solid rgba(255,255,255,0.05);
   z-index: 2;
+  text-align: center;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.dot.active {
+  background: var(--accent);
+  width: 24px;
+  border-radius: var(--radius-pill);
 }
 
 /* ── BENTO BOX SERVICES ── */
@@ -217,7 +246,7 @@ nav {
 .pt-item video { width: 100%; height: 100%; object-fit: cover; }
 .pt-overlay { position: absolute; bottom: 16px; left: 16px; background: rgba(11, 15, 25, 0.8); padding: 6px 14px; border-radius: var(--radius-pill); font-family: 'Space Grotesk'; font-size: 0.8rem; color: var(--white); }
 
-/* ── SEÇÃO FAQ INTELIGENTE ── */
+/* ── SEÇÃO FAQ ── */
 .faq-section { padding: 60px 20px; background: var(--dark-bg); }
 .faq-container { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 .faq-item { background: var(--dark-surface); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; transition: all 0.3s ease; }
@@ -239,7 +268,7 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
 .footer-col a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; }
 .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; display: flex; flex-direction: column; gap: 8px; text-align: center; font-size: 0.8rem; color: var(--text-muted); }
 
-/* ── POPUP COMPORTAMENTO SEGURO ── */
+/* ── POPUP ── */
 .popup-overlay { position: fixed; inset: 0; background: rgba(7, 10, 18, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease); padding: 20px; }
 .popup-overlay.active { opacity: 1; pointer-events: auto; }
 .popup-box { background: var(--dark-surface); border: 1px solid var(--border-active); border-radius: var(--radius-lg); padding: 32px 20px; width: 100%; max-width: 400px; text-align: center; position: relative; transform: scale(0.95); transition: transform 0.4s var(--ease); }
@@ -251,19 +280,36 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
 .popup-discount { font-family: 'Space Grotesk', sans-serif; font-size: 3.5rem; font-weight: 900; color: var(--accent); line-height: 1; margin-bottom: 4px; }
 .popup-urgency { font-size: 0.8rem; color: var(--white); font-weight: 600; margin-bottom: 24px; display: block; }
 
+/* ── CORREÇÃO DE LARGURA DO MENU E GRIDS NO PC ── */
 @media (min-width: 769px) {
-  nav { max-width: 900px; padding: 8px 12px 8px 24px; }
-  .nav-links { display: flex; }
+  .nav-wrapper { padding: 0; }
+  nav { 
+    max-width: 1100px; /* Aumentado de 900px para 1100px para evitar o esmagamento */
+    width: 90%;
+    padding: 8px 24px 8px 32px; 
+    gap: 32px;
+  }
+  .nav-links { 
+    display: flex; 
+    gap: 40px; /* Espaço generoso entre as opções do menu */
+  }
   .btn { font-size: 0.9rem; padding: 14px 28px; }
+  
   .hero { padding: 180px 5% 80px; }
-  .hero h1 { font-size: 5.5rem; }
-  .hero p { font-size: 1.25rem; }
+  .hero h1 { font-size: 4.8rem; max-width: 900px; }
+  .hero p { font-size: 1.2rem; max-width: 600px; }
   .hero-actions { flex-direction: row; max-width: 100%; }
   .hero-gallery { display: grid; grid-template-columns: 1.8fr 1.2fr; height: 520px; }
   .hg-main { display: block; }
+  
+  /* Lógica de colunas no PC (desativa carrossel) */
   .process-section { padding: 100px 5%; }
-  .process-grid { display: grid; grid-template-columns: repeat(2, 1fr); max-width: 1200px; gap: 32px; }
-  .bento-section, .promo-section, .portfolio, .faq-section { padding: 120px 5%; }
+  .carousel-wrapper { max-width: 1200px; padding: 0; overflow: visible; }
+  .carousel-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; transform: none !important; }
+  .process-card { flex: none; max-height: 440px; }
+  .carousel-dots { display: none; }
+
+  .bento-section, .promo-section, .portfolio, .faq-section { padding: 100px 5%; }
   .faq-container { max-width: 800px; }
   .bento-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 290px; }
   .bento-large { grid-column: span 2; }
@@ -281,8 +327,8 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
     <a href="#" class="nav-logo"><img src="imagens/LOGO.png" alt="Bez Clean"></a>
     <ul class="nav-links">
       <li><a href="#servicos">Especialidades</a></li>
+      <li><a href="#processos">Processos</a></li>
       <li><a href="#vantagens">Vantagens</a></li>
-      <li><a href="#resultados">Resultados</a></li>
     </ul>
     <a href="https://wa.me/5547997545892?text=*Olá!* 🌟 Quero um orçamento premium." target="_blank" class="btn btn-accent">Agendar Avaliação</a>
   </nav>
@@ -308,36 +354,46 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
     <span class="section-eyebrow">A Ciência da Restauração</span>
     <h2>Nossos Processos em Ação</h2>
   </div>
-  <div class="process-grid reveal">
-    
-    <div class="process-card">
-      <video autoplay muted loop playsinline>
-        <source src="imagens/processo_limpeza_sofa.mp4" type="video/mp4">
-      </video>
-      <div class="process-label">Processo: Extração de Estofados</div>
+  
+  <div class="carousel-wrapper reveal">
+    <div class="carousel-container" id="carouselContainer">
+      
+      <div class="process-card">
+        <video autoplay muted loop playsinline>
+          <source src="imagens/processo_limpeza_sofa.mp4" type="video/mp4">
+        </video>
+        <div class="process-label">Processo: Extração de Estofados</div>
+      </div>
+
+      <div class="process-card">
+        <video autoplay muted loop playsinline>
+          <source src="imagens/colchao_limpoXsujo_oficial.mp4" type="video/mp4">
+        </video>
+        <div class="process-label">Resultado: Colchão (Limpo vs Sujo)</div>
+      </div>
+
+      <div class="process-card">
+        <video autoplay muted loop playsinline>
+          <source src="imagens/Processo_limpeza_banqueta_couro.mp4" type="video/mp4">
+        </video>
+        <div class="process-label">Tratamento: Limpeza e Hidratação de Couro</div>
+      </div>
+
+      <div class="process-card">
+        <video autoplay muted loop playsinline>
+          <source src="imagens/interio_carro_limpoXsujo.mp4" type="video/mp4">
+        </video>
+        <div class="process-label">Antes & Depois: Estética Automotiva</div>
+      </div>
+
     </div>
 
-    <div class="process-card">
-      <video autoplay muted loop playsinline>
-        <source src="imagens/colchao_limpoXsujo_oficial.mp4" type="video/mp4">
-      </video>
-      <div class="process-label">Resultado: Colchão (Metade Limpo / Metade Sujo)</div>
+    <div class="carousel-dots">
+      <div class="dot active" onclick="moveToSlide(0)"></div>
+      <div class="dot" onclick="moveToSlide(1)"></div>
+      <div class="dot" onclick="moveToSlide(2)"></div>
+      <div class="dot" onclick="moveToSlide(3)"></div>
     </div>
-
-    <div class="process-card">
-      <video autoplay muted loop playsinline>
-        <source src="imagens/Processo_limpeza_banqueta_couro.mp4" type="video/mp4">
-      </video>
-      <div class="process-label">Tratamento: Limpeza e Hidratação de Couro</div>
-    </div>
-
-    <div class="process-card">
-      <video autoplay muted loop playsinline>
-        <source src="imagens/interio_carro_limpoXsujo.mp4" type="video/mp4">
-      </video>
-      <div class="process-label">Antes e Depois: Estética Interna Automotiva</div>
-    </div>
-
   </div>
 </section>
 
@@ -380,7 +436,7 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
     
     <div class="faq-item">
       <button class="faq-trigger">Quanto tempo demora para secar?<span class="faq-icon">+</span></button>
-      <div class="faq-answer"><p>Graças ao nosso sistema de extração de alta potência, o estofado fica apenas levemente úmido. O tempo médio de secagem completa varia entre 4 a 12 horas, dependendo do tipo de tecido e da ventilação do ambiente.</p></div>
+      <div class="faq-answer"><p>Graças ao nosso sistema de extração de alta potência, o estofado fica apenas levemente úmido. O tempo médio de secagem completa varia entre 4 a 12 hours, dependendo do tipo de tecido e da ventilação do ambiente.</p></div>
     </div>
 
     <div class="faq-item">
@@ -433,7 +489,6 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.05 });
 document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 
-// Script do FAQ dinâmico
 document.querySelectorAll('.faq-trigger').forEach(trigger => {
   trigger.addEventListener('click', () => {
     const item = trigger.parentElement;
@@ -441,7 +496,29 @@ document.querySelectorAll('.faq-trigger').forEach(trigger => {
   });
 });
 
-// Lógica inteligente do Pop-up controlada por tempo e rolagem
+let currentSlide = 0;
+const container = document.getElementById('carouselContainer');
+const dots = document.querySelectorAll('.dot');
+
+function moveToSlide(slideIndex) {
+  if (window.innerWidth > 768) return;
+  currentSlide = slideIndex;
+  container.style.transform = `translateX(-${currentSlide * 100}%)`;
+  
+  dots.forEach(dot => dot.classList.remove('active'));
+  dots[currentSlide].classList.add('active');
+}
+
+let startX = 0;
+container.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+container.addEventListener('touchend', e => {
+  const diffX = startX - e.changedTouches[0].clientX;
+  if (Math.abs(diffX) > 50) {
+    if (diffX > 0 && currentSlide < 3) moveToSlide(currentSlide + 1);
+    else if (diffX < 0 && currentSlide > 0) moveToSlide(currentSlide - 1);
+  }
+});
+
 window.addEventListener('DOMContentLoaded', () => {
   const popup = document.getElementById('winterPopup');
   const closeBtn = document.getElementById('closePopup');
@@ -456,13 +533,11 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Cronômetro de 15 segundos
   setTimeout(() => {
     timeReached = true;
     checkPopupGatillo();
   }, 15000);
 
-  // Monitoramento de rolagem (30% da tela)
   function handleScroll() {
     const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
     if (totalHeight > 0) {
