@@ -389,9 +389,14 @@ footer {
   .promo-container { grid-template-columns: 1fr; gap: 60px; }
 }
 @media (max-width: 768px) {
-  nav { padding: 8px 16px; gap: 24px; }
+  .nav-wrapper { padding: 0 4%; box-sizing: border-box; }
+  nav { padding: 8px 8px 8px 16px; gap: 10px; width: 100%; justify-content: space-between; }
+  .nav-logo img { height: 34px; }
   .nav-links { display: none; }
-  .hero { padding-top: 150px; }
+  nav .btn { padding: 10px 14px; font-size: 0.75rem; white-space: nowrap; }
+  .hero { padding-top: 140px; }
+  .hero h1 { font-size: 2.8rem; }
+  .hero p { font-size: 1.1rem; }
   .bento-grid { grid-template-columns: 1fr; }
   .bento-large { grid-column: span 1; }
   .portfolio-grid { grid-template-columns: 1fr; }
