@@ -656,26 +656,19 @@ function moveToSlide(slideIndex) {
 function nextSlide() { moveToSlide(currentSlide < totalSlides - 1 ? currentSlide + 1 : 0); }
 function prevSlide() { moveToSlide(currentSlide > 0 ? currentSlide - 1 : totalSlides - 1); }
 
-// Autoplay do carrossel (mobile)
-let autoplayInterval;
-function startAutoplay() { autoplayInterval = setInterval(nextSlide, 4000); }
-function stopAutoplay()  { clearInterval(autoplayInterval); }
-
 // Swipe touch
 let startX = 0;
-container.addEventListener('touchstart', e => { startX = e.touches[0].clientX; stopAutoplay(); });
+container.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
 container.addEventListener('touchend', e => {
   const diffX = startX - e.changedTouches[0].clientX;
   if (Math.abs(diffX) > 50) diffX > 0 ? nextSlide() : prevSlide();
-  startAutoplay();
 });
 
 // ── INIT ──
 window.addEventListener('DOMContentLoaded', () => {
   if (isMobile()) {
-    // Mobile: inicia o slide 0 tocando
+    // Mobile: inicia o slide 0 tocando, sem autoplay
     playActiveSlide(0);
-    startAutoplay();
   } else {
     // Desktop: configura hover
     setupDesktopHover();
@@ -717,7 +710,6 @@ window.addEventListener('resize', () => {
     setupDesktopHover();
   } else {
     moveToSlide(currentSlide);
-    startAutoplay();
   }
 });
 </script>
