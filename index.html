@@ -612,9 +612,13 @@ generalVideos.forEach(v => generalObserver.observe(v));
 // ── CARROSSEL: VÍDEOS ──
 const carouselVideos = document.querySelectorAll('.carousel-video');
 
-// DESKTOP: hover para tocar, pausa ao tirar o mouse
+// DESKTOP: carrega o vídeo pausado (mostra primeiro frame) e hover para tocar
 function setupDesktopHover() {
   carouselVideos.forEach(video => {
+    // Carrega e pausa imediatamente — exibe o primeiro frame como thumbnail
+    loadVideo(video);
+    video.addEventListener('loadeddata', () => { video.pause(); }, { once: true });
+
     const card = video.closest('.process-card');
     card.addEventListener('mouseenter', () => playVideo(video));
     card.addEventListener('mouseleave', () => pauseVideo(video));
