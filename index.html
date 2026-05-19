@@ -106,7 +106,7 @@ nav {
 /* ── HERO ── */
 .hero {
   min-height: 90vh;
-  padding: 120px 20px 40px;
+  padding: 130px 20px 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -136,15 +136,17 @@ nav {
   margin-bottom: 20px;
 }
 .badge-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
-.hero h1 { font-size: 2.6rem; font-weight: 900; max-width: 100%; margin-bottom: 16px; }
+.hero h1 { font-size: clamp(1.9rem, 7vw, 2.6rem); font-weight: 900; max-width: 100%; margin-bottom: 16px; }
 .hero p { font-size: 1rem; color: var(--text-muted); max-width: 100%; margin-bottom: 32px; }
 .hero-actions { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 320px; }
 .hero-actions .btn { padding: 14px; font-size: 0.95rem; width: 100%; }
 
 .hero-gallery { width: 100%; margin-top: 40px; display: block; }
-.hg-item { border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); height: 320px; width: 100%; }
-.hg-item video { width: 100%; height: 100%; object-fit: cover; }
-.hg-main { display: none; }
+.hg-item { border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); width: 100%; }
+.hg-item img,
+.hg-item video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hg-video { height: 300px; }
+.hg-main { display: none; height: 0; }
 
 /* ── SEÇÃO PROCESSOS EM VÍDEO (CARROSSEL) ── */
 .process-section {
@@ -154,10 +156,12 @@ nav {
 }
 .carousel-wrapper {
   position: relative;
-  max-width: 340px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 20px;
   overflow: hidden;
+  box-sizing: border-box;
 }
 .carousel-container {
   display: flex;
@@ -219,7 +223,37 @@ nav {
   border-radius: var(--radius-pill);
 }
 
-/* ── BENTO BOX SERVICES ── */
+/* ── CARROSSEL MELHORADO ── */
+.carousel-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+.carousel-nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--dark-surface);
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s var(--ease);
+}
+.carousel-nav-btn:hover {
+  background: var(--accent);
+  color: var(--dark-bg);
+  border-color: var(--accent);
+}
+@media (min-width: 769px) {
+  .carousel-nav { display: none; }
+}
+
 .bento-section { padding: 60px 20px; background: var(--dark-bg); }
 .section-header { margin-bottom: 32px; text-align: left; }
 .section-eyebrow { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--accent); text-transform: uppercase; font-size: 0.8rem; margin-bottom: 8px; display: block; }
@@ -280,42 +314,53 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
 .popup-discount { font-family: 'Space Grotesk', sans-serif; font-size: 3.5rem; font-weight: 900; color: var(--accent); line-height: 1; margin-bottom: 4px; }
 .popup-urgency { font-size: 0.8rem; color: var(--white); font-weight: 600; margin-bottom: 24px; display: block; }
 
-/* ── CORREÇÃO DE LARGURA DO MENU E GRIDS NO PC ── */
 @media (min-width: 769px) {
   .nav-wrapper { padding: 0; }
   nav { 
-    max-width: 1100px; /* Aumentado de 900px para 1100px para evitar o esmagamento */
+    max-width: 1100px;
     width: 90%;
     padding: 8px 24px 8px 32px; 
     gap: 32px;
   }
   .nav-links { 
     display: flex; 
-    gap: 40px; /* Espaço generoso entre as opções do menu */
+    gap: 40px;
   }
   .btn { font-size: 0.9rem; padding: 14px 28px; }
   
-  .hero { padding: 180px 5% 80px; }
+  .hero { padding: 160px 5% 80px; }
   .hero h1 { font-size: 4.8rem; max-width: 900px; }
   .hero p { font-size: 1.2rem; max-width: 600px; }
   .hero-actions { flex-direction: row; max-width: 100%; }
-  .hero-gallery { display: grid; grid-template-columns: 1.8fr 1.2fr; height: 520px; }
-  .hg-main { display: block; }
+
+  /* Hero gallery no desktop: duas colunas lado a lado com altura uniforme */
+  .hero-gallery {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 16px;
+    height: 500px;
+    margin-top: 60px;
+  }
+  .hg-item { height: 100%; }
+  .hg-video { height: 100%; }
+  .hg-main { display: block; height: 100%; }
   
-  /* Lógica de colunas no PC (desativa carrossel) */
+  /* Carrossel no PC: grid de 4 colunas */
   .process-section { padding: 100px 5%; }
   .carousel-wrapper { max-width: 1200px; padding: 0; overflow: visible; }
   .carousel-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; transform: none !important; }
-  .process-card { flex: none; max-height: 440px; }
+  .process-card { flex: none; max-height: 480px; }
   .carousel-dots { display: none; }
 
   .bento-section, .promo-section, .portfolio, .faq-section { padding: 100px 5%; }
   .faq-container { max-width: 800px; }
   .bento-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 290px; }
   .bento-large { grid-column: span 2; }
-  .promo-container { grid-template-columns: 1fr 1fr; gap: 80px; }
-  .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
-  .footer-top { grid-template-columns: 2fr 1fr 1fr; gap: 60px; }
+
+  /* CORREÇÃO: promo-container e footer-top precisam de display: grid */
+  .promo-container { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .portfolio-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; }
   .footer-bottom { flex-direction: row; justify-content: space-between; text-align: left; }
 }
 </style>
@@ -394,6 +439,10 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
       <div class="dot" onclick="moveToSlide(2)"></div>
       <div class="dot" onclick="moveToSlide(3)"></div>
     </div>
+    <div class="carousel-nav">
+      <button class="carousel-nav-btn" onclick="prevSlide()">&#8592;</button>
+      <button class="carousel-nav-btn" onclick="nextSlide()">&#8594;</button>
+    </div>
   </div>
 </section>
 
@@ -436,7 +485,7 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
     
     <div class="faq-item">
       <button class="faq-trigger">Quanto tempo demora para secar?<span class="faq-icon">+</span></button>
-      <div class="faq-answer"><p>Graças ao nosso sistema de extração de alta potência, o estofado fica apenas levemente úmido. O tempo médio de secagem completa varia entre 4 a 12 hours, dependendo do tipo de tecido e da ventilação do ambiente.</p></div>
+      <div class="faq-answer"><p>Graças ao nosso sistema de extração de alta potência, o estofado fica apenas levemente úmido. O tempo médio de secagem completa varia entre 4 a 12 horas, dependendo do tipo de tecido e da ventilação do ambiente.</p></div>
     </div>
 
     <div class="faq-item">
@@ -497,25 +546,44 @@ document.querySelectorAll('.faq-trigger').forEach(trigger => {
 });
 
 let currentSlide = 0;
+const totalSlides = 4;
 const container = document.getElementById('carouselContainer');
 const dots = document.querySelectorAll('.dot');
 
 function moveToSlide(slideIndex) {
+  // No desktop o carrossel vira grid, então ignora
   if (window.innerWidth > 768) return;
   currentSlide = slideIndex;
   container.style.transform = `translateX(-${currentSlide * 100}%)`;
-  
   dots.forEach(dot => dot.classList.remove('active'));
-  dots[currentSlide].classList.add('active');
+  if (dots[currentSlide]) dots[currentSlide].classList.add('active');
 }
 
+function nextSlide() {
+  moveToSlide(currentSlide < totalSlides - 1 ? currentSlide + 1 : 0);
+}
+
+function prevSlide() {
+  moveToSlide(currentSlide > 0 ? currentSlide - 1 : totalSlides - 1);
+}
+
+// Autoplay a cada 4 segundos
+let autoplayInterval = setInterval(nextSlide, 4000);
+
+// Pausa autoplay ao interagir
+container.addEventListener('touchstart', () => clearInterval(autoplayInterval));
+container.addEventListener('touchend', () => {
+  autoplayInterval = setInterval(nextSlide, 4000);
+});
+
+// Swipe touch
 let startX = 0;
-container.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+container.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
 container.addEventListener('touchend', e => {
   const diffX = startX - e.changedTouches[0].clientX;
   if (Math.abs(diffX) > 50) {
-    if (diffX > 0 && currentSlide < 3) moveToSlide(currentSlide + 1);
-    else if (diffX < 0 && currentSlide > 0) moveToSlide(currentSlide - 1);
+    if (diffX > 0) nextSlide();
+    else prevSlide();
   }
 });
 
@@ -536,13 +604,13 @@ window.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     timeReached = true;
     checkPopupGatillo();
-  }, 15000);
+  }, 40000);
 
   function handleScroll() {
     const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
     if (totalHeight > 0) {
       const scrollPercent = (window.scrollY / totalHeight) * 100;
-      if (scrollPercent >= 30) {
+      if (scrollPercent >= 60) {
         scrollReached = true;
         checkPopupGatillo();
       }
