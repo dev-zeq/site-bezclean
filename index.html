@@ -223,6 +223,34 @@ nav {
   border-radius: var(--radius-pill);
 }
 
+/* ── HOVER TO PLAY (desktop) ── */
+.process-card .play-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(11, 15, 25, 0.45);
+  backdrop-filter: blur(2px);
+  transition: opacity 0.3s ease;
+  z-index: 3;
+  pointer-events: none;
+}
+.process-card .play-hint svg {
+  width: 52px; height: 52px;
+  fill: rgba(255,255,255,0.85);
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+  transition: transform 0.3s ease;
+}
+.process-card:hover .play-hint { opacity: 0; }
+
+/* Espaçamento lateral no carrossel mobile — peek do próximo card */
+@media (max-width: 768px) {
+  .carousel-wrapper { padding: 0 32px; }
+  .process-card { flex: 0 0 88%; margin-right: 16px; }
+  .carousel-container { padding-left: 0; }
+}
+
 /* ── CARROSSEL MELHORADO ── */
 .carousel-nav {
   display: flex;
@@ -390,7 +418,7 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
   </div>
   <div class="hero-gallery reveal delay-3">
     <div class="hg-item hg-main"><img src="imagens/foto1-bez.jpg" alt="Profissionalismo Bez Clean"></div>
-    <div class="hg-item hg-video"><video autoplay muted loop playsinline><source src="imagens/video_entrada.mp4" type="video/mp4"></video></div>
+    <div class="hg-item hg-video"><video class="lazy-video" muted loop playsinline data-src="imagens/video_entrada.mp4"><source type="video/mp4"></video></div>
   </div>
 </section>
 
@@ -404,30 +432,26 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
     <div class="carousel-container" id="carouselContainer">
       
       <div class="process-card">
-        <video autoplay muted loop playsinline>
-          <source src="imagens/processo_limpeza_sofa.mp4" type="video/mp4">
-        </video>
+        <video class="lazy-video carousel-video" muted loop playsinline data-src="imagens/processo_limpeza_sofa.mp4"><source type="video/mp4"></video>
+        <div class="play-hint"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         <div class="process-label">Processo: Extração de Estofados</div>
       </div>
 
       <div class="process-card">
-        <video autoplay muted loop playsinline>
-          <source src="imagens/colchao_limpoXsujo_oficial.mp4" type="video/mp4">
-        </video>
+        <video class="lazy-video carousel-video" muted loop playsinline data-src="imagens/colchao_limpoXsujo_oficial.mp4"><source type="video/mp4"></video>
+        <div class="play-hint"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         <div class="process-label">Resultado: Colchão (Limpo vs Sujo)</div>
       </div>
 
       <div class="process-card">
-        <video autoplay muted loop playsinline>
-          <source src="imagens/Processo_limpeza_banqueta_couro.mp4" type="video/mp4">
-        </video>
+        <video class="lazy-video carousel-video" muted loop playsinline data-src="imagens/Processo_limpeza_banqueta_couro.mp4"><source type="video/mp4"></video>
+        <div class="play-hint"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         <div class="process-label">Tratamento: Limpeza e Hidratação de Couro</div>
       </div>
 
       <div class="process-card">
-        <video autoplay muted loop playsinline>
-          <source src="imagens/interio_carro_limpoXsujo.mp4" type="video/mp4">
-        </video>
+        <video class="lazy-video carousel-video" muted loop playsinline data-src="imagens/interio_carro_limpoXsujo.mp4"><source type="video/mp4"></video>
+        <div class="play-hint"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         <div class="process-label">Antes & Depois: Estética Automotiva</div>
       </div>
 
@@ -471,8 +495,8 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
 <section class="portfolio" id="resultados">
   <div class="section-header reveal"><span class="section-eyebrow">Resultados Reais</span><h2>Veja a diferença na prática.</h2></div>
   <div class="portfolio-grid">
-    <div class="pt-item reveal"><video autoplay muted loop playsinline><source src="imagens/video-bez1.mp4" type="video/mp4"></video><div class="pt-overlay">Sofá Renovado</div></div>
-    <div class="pt-item reveal delay-1"><video autoplay muted loop playsinline><source src="imagens/video-bez2.mp4" type="video/mp4"></video><div class="pt-overlay">Resultado Imediato</div></div>
+    <div class="pt-item reveal"><video class="lazy-video" muted loop playsinline data-src="imagens/video-bez1.mp4"><source type="video/mp4"></video><div class="pt-overlay">Sofá Renovado</div></div>
+    <div class="pt-item reveal delay-1"><video class="lazy-video" muted loop playsinline data-src="imagens/video-bez2.mp4"><source type="video/mp4"></video><div class="pt-overlay">Resultado Imediato</div></div>
   </div>
 </section>
 
@@ -533,64 +557,129 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
 </footer>
 
 <script>
-const observer = new IntersectionObserver((entries) => {
+// ── REVEAL ON SCROLL ──
+const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('in-view'); });
 }, { threshold: 0.05 });
-document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
+// ── FAQ ──
 document.querySelectorAll('.faq-trigger').forEach(trigger => {
-  trigger.addEventListener('click', () => {
-    const item = trigger.parentElement;
-    item.classList.toggle('active');
-  });
+  trigger.addEventListener('click', () => trigger.parentElement.classList.toggle('active'));
 });
 
+// ── LAZY LOAD DE VÍDEOS ──
+// Carrega o src só quando o vídeo entra no viewport
+function loadVideo(video) {
+  if (video.dataset.loaded) return;
+  const src = video.dataset.src;
+  if (!src) return;
+  video.querySelector('source').src = src;
+  video.load();
+  video.dataset.loaded = 'true';
+}
+
+const isMobile = () => window.innerWidth <= 768;
+
+// ── LÓGICA DE PLAY/PAUSE ──
+function playVideo(video) {
+  loadVideo(video);
+  video.play().catch(() => {});
+}
+function pauseVideo(video) {
+  video.pause();
+}
+
+// ── VÍDEOS GERAIS (hero + portfolio): play quando visível, pause quando sair ──
+const generalVideos = document.querySelectorAll('.lazy-video:not(.carousel-video)');
+
+const generalObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    const video = entry.target;
+    if (entry.isIntersecting) {
+      loadVideo(video);
+      // No desktop o hero video roda sempre que visível
+      // Portfolio: só roda se visível (sem hover necessário)
+      playVideo(video);
+    } else {
+      pauseVideo(video);
+    }
+  });
+}, { threshold: 0.3 });
+
+generalVideos.forEach(v => generalObserver.observe(v));
+
+// ── CARROSSEL: VÍDEOS ──
+const carouselVideos = document.querySelectorAll('.carousel-video');
+
+// DESKTOP: hover para tocar, pausa ao tirar o mouse
+function setupDesktopHover() {
+  carouselVideos.forEach(video => {
+    const card = video.closest('.process-card');
+    card.addEventListener('mouseenter', () => playVideo(video));
+    card.addEventListener('mouseleave', () => pauseVideo(video));
+  });
+}
+
+// MOBILE: só o slide ativo roda
+function playActiveSlide(index) {
+  carouselVideos.forEach((video, i) => {
+    if (i === index) playVideo(video);
+    else pauseVideo(video);
+  });
+}
+
+// ── CARROSSEL NAVIGATION ──
 let currentSlide = 0;
 const totalSlides = 4;
 const container = document.getElementById('carouselContainer');
 const dots = document.querySelectorAll('.dot');
 
 function moveToSlide(slideIndex) {
-  // No desktop o carrossel vira grid, então ignora
-  if (window.innerWidth > 768) return;
+  if (!isMobile()) return;
   currentSlide = slideIndex;
-  container.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+  // Calcula o offset: cada card é 88% + 16px de margem
+  const cardWidth = container.querySelector('.process-card').offsetWidth + 16;
+  container.style.transform = `translateX(-${currentSlide * cardWidth}px)`;
+
   dots.forEach(dot => dot.classList.remove('active'));
   if (dots[currentSlide]) dots[currentSlide].classList.add('active');
+
+  playActiveSlide(currentSlide);
 }
 
-function nextSlide() {
-  moveToSlide(currentSlide < totalSlides - 1 ? currentSlide + 1 : 0);
-}
+function nextSlide() { moveToSlide(currentSlide < totalSlides - 1 ? currentSlide + 1 : 0); }
+function prevSlide() { moveToSlide(currentSlide > 0 ? currentSlide - 1 : totalSlides - 1); }
 
-function prevSlide() {
-  moveToSlide(currentSlide > 0 ? currentSlide - 1 : totalSlides - 1);
-}
-
-// Autoplay a cada 4 segundos
-let autoplayInterval = setInterval(nextSlide, 4000);
-
-// Pausa autoplay ao interagir
-container.addEventListener('touchstart', () => clearInterval(autoplayInterval));
-container.addEventListener('touchend', () => {
-  autoplayInterval = setInterval(nextSlide, 4000);
-});
+// Autoplay do carrossel (mobile)
+let autoplayInterval;
+function startAutoplay() { autoplayInterval = setInterval(nextSlide, 4000); }
+function stopAutoplay()  { clearInterval(autoplayInterval); }
 
 // Swipe touch
 let startX = 0;
-container.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
+container.addEventListener('touchstart', e => { startX = e.touches[0].clientX; stopAutoplay(); });
 container.addEventListener('touchend', e => {
   const diffX = startX - e.changedTouches[0].clientX;
-  if (Math.abs(diffX) > 50) {
-    if (diffX > 0) nextSlide();
-    else prevSlide();
-  }
+  if (Math.abs(diffX) > 50) diffX > 0 ? nextSlide() : prevSlide();
+  startAutoplay();
 });
 
+// ── INIT ──
 window.addEventListener('DOMContentLoaded', () => {
+  if (isMobile()) {
+    // Mobile: inicia o slide 0 tocando
+    playActiveSlide(0);
+    startAutoplay();
+  } else {
+    // Desktop: configura hover
+    setupDesktopHover();
+  }
+
+  // ── POPUP ──
   const popup = document.getElementById('winterPopup');
   const closeBtn = document.getElementById('closePopup');
-  
   let timeReached = false;
   let scrollReached = false;
 
@@ -601,25 +690,31 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  setTimeout(() => {
-    timeReached = true;
-    checkPopupGatillo();
-  }, 40000);
+  setTimeout(() => { timeReached = true; checkPopupGatillo(); }, 40000);
 
   function handleScroll() {
     const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
     if (totalHeight > 0) {
       const scrollPercent = (window.scrollY / totalHeight) * 100;
-      if (scrollPercent >= 60) {
-        scrollReached = true;
-        checkPopupGatillo();
-      }
+      if (scrollPercent >= 60) { scrollReached = true; checkPopupGatillo(); }
     }
   }
 
   window.addEventListener('scroll', handleScroll);
   closeBtn.addEventListener('click', () => popup.classList.remove('active'));
-  popup.addEventListener('click', (e) => { if (e.target === popup) popup.classList.remove('active'); });
+  popup.addEventListener('click', e => { if (e.target === popup) popup.classList.remove('active'); });
+});
+
+// Reinit se redimensionar (ex: girar tela)
+window.addEventListener('resize', () => {
+  if (!isMobile()) {
+    container.style.transform = 'none';
+    stopAutoplay();
+    setupDesktopHover();
+  } else {
+    moveToSlide(currentSlide);
+    startAutoplay();
+  }
 });
 </script>
 </body>
