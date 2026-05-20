@@ -12,6 +12,9 @@
 :root {
   --accent: #a3e635;
   --accent-hover: #bef264;
+  --ice: #7dd3fc;
+  --ice-dim: rgba(125, 211, 252, 0.12);
+  --ice-border: rgba(125, 211, 252, 0.25);
   --dark-bg: #0b0f19;
   --dark-surface: #131926;
   --dark-surface-hover: #1c2436;
@@ -342,6 +345,173 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
 .popup-discount { font-family: 'Space Grotesk', sans-serif; font-size: 3.5rem; font-weight: 900; color: var(--accent); line-height: 1; margin-bottom: 4px; }
 .popup-urgency { font-size: 0.8rem; color: var(--white); font-weight: 600; margin-bottom: 24px; display: block; }
 
+/* ── HERO INVERNO ── */
+.snow-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+.snowflake {
+  position: absolute;
+  top: -10px;
+  font-size: 1em;
+  animation: snowfall linear infinite;
+}
+@keyframes snowfall {
+  0%   { transform: translateY(-10px) translateX(0) rotate(0deg); opacity: 0.8; }
+  100% { transform: translateY(110vh) translateX(40px) rotate(360deg); opacity: 0; }
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ice-dim);
+  border: 1px solid var(--ice-border);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ice);
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 2;
+  animation: fadeUp 0.8s 0.1s both;
+}
+.badge-dot {
+  width: 7px; height: 7px;
+  background: var(--ice);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--ice);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 6px var(--ice); transform: scale(1); }
+  50%       { box-shadow: 0 0 14px var(--ice); transform: scale(1.3); }
+}
+.hero .highlight-ice { color: var(--ice); }
+.hero-glow {
+  background: radial-gradient(ellipse at center,
+    rgba(125, 211, 252, 0.07) 0%,
+    rgba(163, 230, 53, 0.04) 50%,
+    transparent 70%
+  );
+}
+.secagem-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(163, 230, 53, 0.08);
+  border: 1px solid rgba(163, 230, 53, 0.2);
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 36px;
+  position: relative;
+  z-index: 2;
+  animation: fadeUp 0.8s 0.45s both;
+}
+.btn-pulse {
+  background: var(--accent);
+  color: var(--dark-bg);
+  position: relative;
+  overflow: visible;
+}
+.btn-pulse::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: var(--radius-pill);
+  background: rgba(163, 230, 53, 0.3);
+  animation: ring-pulse 2s ease-out infinite;
+  z-index: -1;
+}
+.btn-pulse::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: var(--radius-pill);
+  background: rgba(163, 230, 53, 0.12);
+  animation: ring-pulse 2s ease-out 0.4s infinite;
+  z-index: -1;
+}
+@keyframes ring-pulse {
+  0%   { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+.btn-pulse:hover { background: var(--accent-hover); transform: translateY(-2px); }
+.discount-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  z-index: 2;
+  margin-top: 4px;
+  animation: fadeUp 0.8s 0.65s both;
+}
+.discount-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--ice);
+  line-height: 1;
+}
+.discount-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: left;
+  line-height: 1.3;
+}
+.discount-label strong { color: var(--text-main); display: block; }
+.urgency {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-top: 12px;
+  position: relative;
+  z-index: 2;
+  animation: fadeUp 0.8s 0.7s both;
+}
+.urgency-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #f97316;
+  box-shadow: 0 0 8px #f97316;
+  flex-shrink: 0;
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+.trust-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 32px;
+  position: relative;
+  z-index: 2;
+  animation: fadeUp 0.8s 0.85s both;
+  flex-wrap: wrap;
+}
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.trust-item span { color: var(--accent); font-weight: 700; }
+.trust-divider { width: 3px; height: 3px; background: var(--border); border-radius: 50%; }
+.hg-item { border: 1px solid var(--ice-border); box-shadow: 0 0 40px rgba(125, 211, 252, 0.08); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 @media (min-width: 769px) {
   .nav-wrapper { padding: 0; }
   nav { 
@@ -408,14 +578,50 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
 </div>
 
 <section class="hero">
+  <div class="snow-container" id="snow"></div>
   <div class="hero-glow"></div>
-  <div class="hero-badge reveal delay-1"><div class="badge-dot"></div>Atendimento em Balneário Camboriú e Região</div>
-  <h1 class="reveal delay-2">Elevando o padrão de conforto do seu ambiente.</h1>
-  <p class="reveal delay-3">Higienização e limpeza profissional de estofados. Removemos impurezas profundas com tecnologia avançada para lares exigentes.</p>
-  <div class="hero-actions reveal delay-3">
-    <a href="https://wa.me/5547997545892?text=*Olá!* 🌟 Gostaria de solicitar um orçamento." target="_blank" class="btn btn-accent">Falar com Especialista</a>
-    <a href="#servicos" class="btn btn-outline">Explorar Serviços</a>
+
+  <div class="hero-badge">
+    <div class="badge-dot"></div>
+    ❄️ Oferta Especial de Inverno — Junho 2026
   </div>
+
+  <h1 class="reveal delay-1">Seu sofá limpo e <span class="highlight-ice">seca no mesmo dia</span> — garantido.</h1>
+
+  <p class="reveal delay-2">
+    Não espere o verão. Nosso sistema de extração profissional garante secagem rápida em qualquer época do ano.
+  </p>
+
+  <div class="secagem-badge">
+    ✓ Secagem rápida garantida · Produtos seguros · Atendimento a domicílio
+  </div>
+
+  <div class="hero-actions reveal delay-3">
+    <a href="https://wa.me/5547997545892?text=*Olá!* ❄️ Quero aproveitar a Oferta de Inverno com *50% de Desconto*." target="_blank" class="btn btn-pulse">Garantir 50% OFF agora</a>
+    <a href="#servicos" class="btn btn-outline">Ver Serviços</a>
+  </div>
+
+  <div class="discount-pill">
+    <div class="discount-num">50%</div>
+    <div class="discount-label">
+      <strong>de desconto</strong>
+      válido por tempo limitado
+    </div>
+  </div>
+
+  <div class="urgency">
+    <div class="urgency-dot"></div>
+    Vagas limitadas — últimas disponibilidades para este mês
+  </div>
+
+  <div class="trust-row">
+    <div class="trust-item"><span>⭐ 5,0</span> no Google</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><span>500+</span> clientes atendidos</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><span>0%</span> taxa de deslocamento</div>
+  </div>
+
   <div class="hero-gallery reveal delay-3">
     <div class="hg-item hg-main"><img src="imagens/foto1-bez.jpg" alt="Profissionalismo Bez Clean"></div>
     <div class="hg-item hg-video"><video class="lazy-video" muted loop playsinline data-src="imagens/video_entrada.mp4"><source type="video/mp4"></video></div>
@@ -555,6 +761,25 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
   </div>
   <div class="footer-bottom"><p>© 2026 Bez Clean. Todos os direitos reservados.</p><p>Design Ultra Premium</p></div>
 </footer>
+
+<script>
+// ── NEVE ANIMADA ──
+const snow = document.getElementById('snow');
+for (let i = 0; i < 30; i++) {
+  const flake = document.createElement('div');
+  flake.className = 'snowflake';
+  flake.textContent = '❄';
+  flake.style.cssText = `
+    left: ${Math.random() * 100}%;
+    font-size: ${0.6 + Math.random() * 0.8}rem;
+    opacity: ${0.3 + Math.random() * 0.5};
+    animation-duration: ${5 + Math.random() * 8}s;
+    animation-delay: ${-Math.random() * 10}s;
+    color: rgba(125, 211, 252, ${0.2 + Math.random() * 0.4});
+  `;
+  snow.appendChild(flake);
+}
+</script>
 
 <script>
 // ── REVEAL ON SCROLL ──
