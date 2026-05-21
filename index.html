@@ -741,6 +741,44 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
 .popup-discount { font-family: 'Space Grotesk', sans-serif; font-size: 3.5rem; font-weight: 900; color: var(--accent); line-height: 1; margin-bottom: 4px; }
 .popup-urgency { font-size: 0.8rem; color: var(--white); font-weight: 600; margin-bottom: 24px; display: block; }
 
+/* ── WHATSAPP FLUTUANTE ── */
+.whatsapp-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 5000;
+  background: #25D366;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 8px 30px rgba(37,211,102,0.4);
+  transition: all 0.3s;
+  animation: waPulse 3s ease-in-out infinite;
+}
+.whatsapp-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 40px rgba(37,211,102,0.6);
+}
+@keyframes waPulse {
+  0%, 100% { box-shadow: 0 8px 30px rgba(37,211,102,0.4); }
+  50% { box-shadow: 0 8px 50px rgba(37,211,102,0.8); }
+}
+.whatsapp-btn svg { width: 32px; height: 32px; fill: #fff; }
+
+@media (max-width: 768px) {
+  .whatsapp-btn {
+    bottom: 20px;
+    right: 20px;
+    width: 55px;
+    height: 55px;
+  }
+  .whatsapp-btn svg { width: 28px; height: 28px; }
+}
+
 @media (min-width: 769px) {
   .nav-wrapper { padding: 0; }
   nav {
@@ -802,6 +840,22 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
   .footer-bottom { flex-direction: row; justify-content: space-between; text-align: left; }
 }
 </style>
+
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2075796059527029');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2075796059527029&ev=PageView&noscript=1"
+/></noscript>
 </head>
 <body>
 
@@ -813,7 +867,7 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
       <li><a href="#processos">Processos</a></li>
       <li><a href="#vantagens">Vantagens</a></li>
     </ul>
-    <a href="https://wa.me/5547997545892?text=*Olá!* 🌟 Quero um orçamento premium." target="_blank" class="btn btn-accent">Agendar Avaliação</a>
+    <a href="https://wa.me/5547997545892?text=*Olá!* 🌟 Quero um orçamento premium." target="_blank" class="btn btn-accent" onclick="fbq('track', 'Contact');">Agendar Avaliação</a>
   </nav>
 </div>
 
@@ -832,7 +886,6 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
     Inverno = mais tempo em casa + umidade = proliferação de mofo, ácaros e bactérias no seu sofá. <strong>Aja agora antes que seja tarde.</strong>
   </p>
 
-  <!-- MEGA DESCONTO BOX -->
   <div class="mega-discount-box">
     <div class="discount-top">
       <div class="discount-number">50%</div>
@@ -847,15 +900,13 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
     </div>
   </div>
 
-  <!-- CTA MEGA DESTAQUE -->
   <div class="hero-cta-container">
-    <a href="https://wa.me/5547997545892?text=*Olá!* ❄️ Quero garantir minha vaga na *Oferta de Inverno com 50% OFF*. Tenho interesse em higienizar meu sofá/estofado." target="_blank" class="btn-mega-cta">
+    <a href="https://wa.me/5547997545892?text=*Olá!* ❄️ Quero garantir minha vaga na *Oferta de Inverno com 50% OFF*. Tenho interesse em higienizar meu sofá/estofado." target="_blank" class="btn-mega-cta" onclick="fbq('track', 'Contact');">
       <span class="whatsapp-icon">📱</span>
       GARANTIR MINHA VAGA AGORA
     </a>
   </div>
 
-  <!-- BENEFÍCIOS RÁPIDOS -->
   <div class="quick-benefits">
     <div class="benefit-item">
       <div class="benefit-icon">⚡</div>
@@ -871,7 +922,6 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
     </div>
   </div>
 
-  <!-- PROVA SOCIAL -->
   <div class="trust-proof">
     <div class="trust-item">
       <span class="icon">⭐</span>
@@ -887,7 +937,6 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
     </div>
   </div>
 
-  <!-- GARANTIA -->
   <div class="guarantee-badge">
     <span class="shield-icon">🛡️</span>
     GARANTIA DE SATISFAÇÃO OU SEU DINHEIRO DE VOLTA
@@ -960,7 +1009,7 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
 
 <section class="promo-section" id="vantagens">
   <div class="promo-container">
-    <div class="promo-content reveal"><span class="section-eyebrow">Vantagens Bez Clean</span><h2>O melhor para quem conhece qualidade.</h2><p>Condições exclusivas para manter o seu ambiente sempre impecável, valorizando nossos clientes.</p><a href="https://wa.me/5547997545892?text=*Olá!* 🌟 Quero garantir meu desconto." target="_blank" class="btn btn-accent">Garantir Condição</a></div>
+    <div class="promo-content reveal"><span class="section-eyebrow">Vantagens Bez Clean</span><h2>O melhor para quem conhece qualidade.</h2><p>Condições exclusivas para manter o seu ambiente sempre impecável, valorizando nossos clientes.</p><a href="https://wa.me/5547997545892?text=*Olá!* 🌟 Quero garantir meu desconto." target="_blank" class="btn btn-accent" onclick="fbq('track', 'Contact');">Garantir Condição</a></div>
     <div class="promo-cards">
       <div class="p-card reveal delay-1"><div class="p-card-icon">%</div><div class="p-card-text"><h4>Cliente Fidelidade</h4><p>Para clientes com última higienização há até 1 ano, oferecemos <strong>30% de desconto</strong>.</p></div></div>
       <div class="p-card reveal delay-2"><div class="p-card-icon">+</div><div class="p-card-text"><h4>Combo Promocional</h4><p>Condição especial ao agendar a higienização de <strong>Sofá + Colchão</strong> juntos.</p></div></div>
@@ -1020,7 +1069,7 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
     <p>Proteja seu lar antes do frio. Evite o acúmulo de umidade e mofo nos seus estofados com 50% de desconto por tempo limitado.</p>
     <div class="popup-discount">50% OFF</div>
     <span class="popup-urgency">⚠️ Últimas 12 vagas disponíveis</span>
-    <a href="https://wa.me/5547997545892?text=*Olá!* 🌟 Quero aproveitar a Oferta de Inverno com *50% de Desconto*." target="_blank" class="btn btn-accent" style="width: 100%;">Garantir Meu Desconto</a>
+    <a href="https://wa.me/5547997545892?text=*Olá!* 🌟 Quero aproveitar a Oferta de Inverno com *50% de Desconto*." target="_blank" class="btn btn-accent" style="width: 100%;" onclick="fbq('track', 'Contact');">Garantir Meu Desconto</a>
   </div>
 </div>
 
@@ -1028,12 +1077,18 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
   <div class="footer-top reveal">
     <div class="footer-brand"><img src="imagens/LOGO.png" alt="Bez Clean"><p>Elevando o padrão de conforto e saúde do seu lar ou veículo através de higienização profissional de alto nível.</p></div>
     <div class="footer-col"><h4>Serviços</h4><ul><li><a href="#">Sofás e Poltronas</a></li><li><a href="#">Colchões</a></li><li><a href="#">Interior Automotivo</a></li><li><a href="#">Hidratação de Couro</a></li></ul></div>
-    <div class="footer-col"><h4>Contato</h4><ul><li><a href="https://wa.me/5547997545892">(47) 99754-5892</a></li><li><a href="/cdn-cgi/l/email-protection#7f1c10110b1e0b103f1d1a051c131a1e11511c1012511d0d"><span class="__cf_email__" data-cfemail="90f3fffee4f1e4ffd0f2f5eaf3fcf5f1febef3fffdbef2e2">[email&#160;protected]</span></a></li><li><a href="#">Atendimento a domicílio</a></li><li><a href="#">Balneário Camboriú, Itajaí, Camboriú, Itapema, Navegantes</a></li></ul></div>
+    <div class="footer-col"><h4>Contato</h4><ul><li><a href="https://wa.me/5547997545892" onclick="fbq('track', 'Contact');">(47) 99754-5892</a></li><li><a href="mailto:contato@bezclean.com.br">contato@bezclean.com.br</a></li><li><a href="#">Atendimento a domicílio</a></li><li><a href="#">Balneário Camboriú, Itajaí, Camboriú, Itapema, Navegantes</a></li></ul></div>
   </div>
   <div class="footer-bottom"><p>© 2026 Bez Clean. Todos os direitos reservados.</p><p>Design Ultra Premium</p></div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<a class="whatsapp-btn" href="https://wa.me/5547997545892?text=*Olá!* 🌟 Vim pelo site e gostaria de saber mais sobre a higienização de estofados." target="_blank" title="Fale connosco no WhatsApp" onclick="fbq('track', 'Contact');">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<script>
 // ── NEVE ANIMADA MAIS INTENSA ──
 const snow = document.getElementById('snow');
 for (let i = 0; i < 50; i++) {
