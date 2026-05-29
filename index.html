@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bez Clean — Higienização Premium de Estofados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --accent: #a3e635;
+  --accent-hover: #bef264;
+  --ice: #7dd3fc;
+  --ice-dim: rgba(125, 211, 252, 0.12);
+  --ice-border: rgba(125, 211, 252, 0.25);
+  --dark-bg: #0b0f19;
+  --dark-surface: #131926;
+  --dark-surface-hover: #1c2436;
+  --white: #ffffff;
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-active: rgba(163, 230, 53, 0.3);
+  --radius-xl: 40px;
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-pill: 100px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--dark-bg); overflow-x: hidden; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--dark-bg);
+  color: var(--text-main);
+  overflow-x: hidden;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--white);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+
+/* ── NAVIGATION ── */
+.nav-wrapper {
+  position: fixed;
+  top: 16px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  padding: 0 16px;
+}
+nav {
+  background: rgba(19, 25, 38, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  padding: 8px 8px 8px 16px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+.nav-logo img { height: 52px; width: auto; object-fit: contain; display: block; }
+.nav-links { display: none; list-style: none; }
+.nav-links a {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 6px 0;
+  position: relative;
+  transition: color 0.25s ease;
+  white-space: nowrap;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.3s var(--ease);
+  border-radius: 2px;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-links a:hover::after { width: 100%; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  transition: all 0.4s var(--ease);
+  white-space: nowrap;
+}
+.btn-accent { background: var(--accent); color: var(--dark-bg); }
+.btn-accent:hover { background: var(--white); transform: translateY(-1px); }
+.btn-outline { border: 1px solid var(--border); color: var(--white); background: transparent; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 90vh;
+  padding: 130px 20px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+}
+.hero-glow {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 1000px; height: 600px;
+  background: radial-gradient(circle, rgba(163, 230, 53, 0.06) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--dark-surface);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  color: var(--text-main);
+  margin-bottom: 20px;
+}
+.badge-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+.hero h1 { font-size: clamp(1.9rem, 7vw, 2.6rem); font-weight: 900; max-width: 100%; margin-bottom: 16px; }
+.hero p { font-size: 1rem; color: var(--text-muted); max-width: 100%; margin-bottom: 32px; }
+.hero-actions { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 320px; }
+.hero-actions .btn { padding: 14px; font-size: 0.95rem; width: 100%; }
+
+.hero-gallery { width: 100%; margin-top: 40px; display: block; }
+.hg-item { border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); width: 100%; }
+.hg-item img,
+.hg-item video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hg-video { height: 300px; }
+.hg-main { display: none; height: 0; }
+
+/* ── SEÇÃO PROCESSOS EM VÍDEO (CARROSSEL) ── */
+.process-section {
+  padding: 60px 0;
+  background: var(--dark-bg);
+  position: relative;
+}
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.carousel-container {
+  display: flex;
+  transition: transform 0.5s var(--ease);
+  width: 100%;
+}
+.process-card {
+  flex: 0 0 100%;
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 2px solid var(--border-active);
+  box-shadow: 0 0 25px rgba(163, 230, 53, 0.15), 0 20px 40px rgba(0,0,0,0.4);
+  background: var(--dark-surface);
+  aspect-ratio: 9/16;
+}
+.process-card video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+.process-label {
+  position: absolute;
+  bottom: 16px;
+  left: 12px;
+  right: 12px;
+  background: rgba(11, 15, 25, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--white);
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  border: 1px solid rgba(255,255,255,0.05);
+  z-index: 2;
+  text-align: center;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.dot.active {
+  background: var(--accent);
+  width: 24px;
+  border-radius: var(--radius-pill);
+}
+
+/* ── HOVER TO PLAY (desktop) ── */
+.process-card .play-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(11, 15, 25, 0.45);
+  backdrop-filter: blur(2px);
+  transition: opacity 0.3s ease;
+  z-index: 3;
+  pointer-events: none;
+}
+.process-card .play-hint svg {
+  width: 52px; height: 52px;
+  fill: rgba(255,255,255,0.85);
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+  transition: transform 0.3s ease;
+}
+.process-card:hover .play-hint { opacity: 0; }
+
+/* Espaçamento lateral no carrossel mobile — peek do próximo card */
+@media (max-width: 768px) {
+  .carousel-wrapper { padding: 0 32px; }
+  .process-card { flex: 0 0 88%; margin-right: 16px; }
+  .carousel-container { padding-left: 0; }
+}
+
+/* ── CARROSSEL MELHORADO ── */
+.carousel-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+.carousel-nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--dark-surface);
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s var(--ease);
+}
+.carousel-nav-btn:hover {
+  background: var(--accent);
+  color: var(--dark-bg);
+  border-color: var(--accent);
+}
+@media (min-width: 769px) {
+  .carousel-nav { display: none; }
+}
+
+.bento-section { padding: 60px 20px; background: var(--dark-bg); }
+.section-header { margin-bottom: 32px; text-align: left; }
+.section-eyebrow { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--accent); text-transform: uppercase; font-size: 0.8rem; margin-bottom: 8px; display: block; }
+.bento-grid { display: flex; flex-direction: column; gap: 16px; }
+.bento-card { background: var(--dark-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; justify-content: space-between; min-height: 200px; }
+.bento-large h3 { font-size: 1.8rem; margin-bottom: 8px; }
+.bento-icon { width: 44px; height: 44px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-top: 16px; align-self: flex-start; }
+.bento-card h3 { font-size: 1.3rem; margin-bottom: 8px; }
+.bento-card p { font-size: 0.9rem; color: var(--text-muted); }
+
+/* ── PROMO E PORTFOLIO ── */
+.promo-section, .portfolio { padding: 40px 20px; background: var(--dark-bg); }
+.promo-container { display: flex; flex-direction: column; gap: 32px; }
+.promo-content h2 { font-size: 2.2rem; margin-bottom: 16px; }
+.promo-content p { color: var(--text-muted); font-size: 1rem; margin-bottom: 24px; }
+.promo-cards { display: flex; flex-direction: column; gap: 16px; width: 100%; }
+.p-card { background: var(--dark-surface); border: 1px solid var(--border); padding: 20px; border-radius: var(--radius-lg); display: flex; gap: 16px; }
+.p-card-icon { width: 36px; height: 36px; background: rgba(163, 230, 53, 0.1); color: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+.p-card-text h4 { color: var(--white); font-size: 1.1rem; margin-bottom: 4px; }
+.p-card-text p { color: var(--text-muted); font-size: 0.85rem; }
+
+.portfolio-grid { display: flex; flex-direction: column; gap: 16px; }
+.pt-item { position: relative; border-radius: var(--radius-lg); overflow: hidden; height: 300px; border: 1px solid var(--border); }
+.pt-item video { width: 100%; height: 100%; object-fit: cover; }
+.pt-overlay { position: absolute; bottom: 16px; left: 16px; background: rgba(11, 15, 25, 0.8); padding: 6px 14px; border-radius: var(--radius-pill); font-family: 'Space Grotesk'; font-size: 0.8rem; color: var(--white); }
+
+/* ── SEÇÃO FAQ ── */
+.faq-section { padding: 60px 20px; background: var(--dark-bg); }
+.faq-container { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.faq-item { background: var(--dark-surface); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; transition: all 0.3s ease; }
+.faq-trigger { width: 100%; background: none; border: none; padding: 20px; text-align: left; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: var(--white); font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; }
+.faq-icon { font-size: 1.2rem; color: var(--accent); transition: transform 0.3s ease; }
+.faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s var(--ease); padding: 0 20px; color: var(--text-muted); font-size: 0.9rem; }
+.faq-item.active { border-color: var(--border-active); background: var(--dark-surface-hover); }
+.faq-item.active .faq-icon { transform: rotate(45deg); }
+.faq-item.active .faq-answer { padding-bottom: 20px; max-height: 250px; }
+
+/* ── FOOTER ── */
+footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var(--border); }
+.footer-top { display: flex; flex-direction: column; gap: 32px; margin-bottom: 40px; }
+.footer-brand img { height: 40px; width: auto; object-fit: contain; margin-bottom: 16px; }
+.footer-brand p { color: var(--text-muted); font-size: 0.9rem; }
+.footer-col h4 { font-size: 1rem; margin-bottom: 16px; color: var(--white); }
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 12px; }
+.footer-col a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; display: flex; flex-direction: column; gap: 8px; text-align: center; font-size: 0.8rem; color: var(--text-muted); }
+
+
+/* ── HERO INVERNO ── */
+.snow-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+.snowflake {
+  position: absolute;
+  top: -10px;
+  font-size: 1em;
+  animation: snowfall linear infinite;
+}
+@keyframes snowfall {
+  0%   { transform: translateY(-10px) translateX(0) rotate(0deg); opacity: 0.8; }
+  100% { transform: translateY(110vh) translateX(40px) rotate(360deg); opacity: 0; }
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ice-dim);
+  border: 1px solid var(--ice-border);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ice);
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 2;
+  animation: fadeUp 0.8s 0.1s both;
+}
+.badge-dot {
+  width: 7px; height: 7px;
+  background: var(--ice);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--ice);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 6px var(--ice); transform: scale(1); }
+  50%       { box-shadow: 0 0 14px var(--ice); transform: scale(1.3); }
+}
+.hero .highlight-ice { color: var(--ice); }
+.hero-glow {
+  background: radial-gradient(ellipse at center,
+    rgba(125, 211, 252, 0.07) 0%,
+    rgba(163, 230, 53, 0.04) 50%,
+    transparent 70%
+  );
+}
+.secagem-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(163, 230, 53, 0.08);
+  border: 1px solid rgba(163, 230, 53, 0.2);
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 36px;
+  position: relative;
+  z-index: 2;
+  animation: fadeUp 0.8s 0.45s both;
+}
+.btn-pulse {
+  background: var(--accent);
+  color: var(--dark-bg);
+  position: relative;
+  overflow: visible;
+}
+.btn-pulse::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: var(--radius-pill);
+  background: rgba(163, 230, 53, 0.3);
+  animation: ring-pulse 2s ease-out infinite;
+  z-index: -1;
+}
+.btn-pulse::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: var(--radius-pill);
+  background: rgba(163, 230, 53, 0.12);
+  animation: ring-pulse 2s ease-out 0.4s infinite;
+  z-index: -1;
+}
+@keyframes ring-pulse {
+  0%   { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+.btn-pulse:hover { background: var(--accent-hover); transform: translateY(-2px); }
+.discount-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  z-index: 2;
+  margin-top: 4px;
+  animation: fadeUp 0.8s 0.65s both;
+}
+.discount-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--ice);
+  line-height: 1;
+}
+.discount-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: left;
+  line-height: 1.3;
+}
+.discount-label strong { color: var(--text-main); display: block; }
+.urgency {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-top: 12px;
+  position: relative;
+  z-index: 2;
+  animation: fadeUp 0.8s 0.7s both;
+}
+.urgency-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #f97316;
+  box-shadow: 0 0 8px #f97316;
+  flex-shrink: 0;
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+.trust-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 32px;
+  position: relative;
+  z-index: 2;
+  animation: fadeUp 0.8s 0.85s both;
+  flex-wrap: wrap;
+}
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.trust-item span { color: var(--accent); font-weight: 700; }
+.trust-divider { width: 3px; height: 3px; background: var(--border); border-radius: 50%; }
+.hg-item { border: 1px solid var(--ice-border); box-shadow: 0 0 40px rgba(125, 211, 252, 0.08); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (min-width: 769px) {
+  .nav-wrapper { padding: 0; }
+  nav { 
+    max-width: 1100px;
+    width: 90%;
+    padding: 8px 24px 8px 32px; 
+    gap: 32px;
+  }
+  .nav-links { 
+    display: flex; 
+    gap: 40px;
+  }
+  .btn { font-size: 0.9rem; padding: 14px 28px; }
+  
+  .hero { padding: 160px 5% 80px; }
+  .hero h1 { font-size: 4.8rem; max-width: 900px; }
+  .hero p { font-size: 1.2rem; max-width: 600px; }
+  .hero-actions { flex-direction: row; max-width: 100%; }
+
+  /* Hero gallery no desktop: duas colunas lado a lado com altura uniforme */
+  .hero-gallery {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 16px;
+    height: 500px;
+    margin-top: 60px;
+  }
+  .hg-item { height: 100%; }
+  .hg-video { height: 100%; }
+  .hg-main { display: block; height: 100%; }
+  
+  /* Carrossel no PC: grid de 4 colunas */
+  .process-section { padding: 100px 5%; }
+  .carousel-wrapper { max-width: 1200px; padding: 0; overflow: visible; }
+  .carousel-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; transform: none !important; }
+  .process-card { flex: none; max-height: 480px; }
+  .carousel-dots { display: none; }
+
+  .bento-section, .promo-section, .portfolio, .faq-section { padding: 100px 5%; }
+  .faq-container { max-width: 800px; }
+  .bento-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 290px; }
+  .bento-large { grid-column: span 2; }
+
+  /* CORREÇÃO: promo-container e footer-top precisam de display: grid */
+  .promo-container { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .portfolio-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; }
+  .footer-bottom { flex-direction: row; justify-content: space-between; text-align: left; }
+}
+
+
+/* ── ORÇAMENTO INTELIGENTE ── */
+.quote-section {
+  padding: 70px 20px;
+  background:
+    radial-gradient(circle at top left, rgba(125, 211, 252, 0.08), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(163, 230, 53, 0.07), transparent 34%),
+    var(--dark-bg);
+}
+.quote-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+.quote-intro, .quote-card, .quote-result {
+  background: rgba(19, 25, 38, 0.78);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.28);
+}
+.quote-intro { padding: 28px; }
+.quote-intro h2 { font-size: clamp(2rem, 7vw, 3.4rem); margin-bottom: 14px; }
+.quote-intro p { color: var(--text-muted); margin-bottom: 18px; }
+.quote-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(163, 230, 53, 0.08);
+  color: var(--accent);
+  border: 1px solid rgba(163, 230, 53, 0.18);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+.quote-fineprint {
+  margin-top: 12px;
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  line-height: 1.45;
+  opacity: 0.78;
+}
+.quote-card { padding: 18px; }
+.quote-progress {
+  height: 8px;
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+.quote-progress-bar {
+  height: 100%;
+  width: 20%;
+  background: linear-gradient(90deg, var(--accent), var(--ice));
+  border-radius: inherit;
+  transition: width 0.35s var(--ease);
+}
+.quote-step { display: none; }
+.quote-step.active { display: block; animation: fadeUp 0.35s both; }
+.quote-step small { color: var(--accent); font-weight: 800; text-transform: uppercase; font-size: 0.72rem; }
+.quote-step h3 { margin: 8px 0 16px; font-size: 1.55rem; }
+.quote-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.quote-option {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.025);
+  color: var(--text-main);
+  border-radius: var(--radius-md);
+  padding: 15px;
+  text-align: left;
+  cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  transition: all 0.25s var(--ease);
+}
+.quote-option strong { display: block; color: var(--white); margin-bottom: 4px; }
+.quote-option span { color: var(--text-muted); font-size: 0.82rem; }
+.quote-option:hover, .quote-option.selected {
+  border-color: var(--border-active);
+  background: rgba(163, 230, 53, 0.08);
+  transform: translateY(-1px);
+}
+.quote-field {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  padding: 15px;
+  font: inherit;
+  outline: none;
+}
+.quote-field:focus { border-color: var(--border-active); }
+.quote-details-wrap { display: flex; flex-direction: column; gap: 14px; }
+.quote-detail-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.025);
+  padding: 14px;
+}
+.quote-detail-card h4 { font-size: 1.05rem; margin-bottom: 10px; }
+.quote-detail-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.quote-field-label { display: block; color: var(--text-muted); font-size: 0.78rem; font-weight: 800; margin-bottom: 6px; }
+.quote-field option { color: #0b0f19; }
+.quote-combo-line { color: var(--accent); font-weight: 800; }
+@media (min-width: 769px) { .quote-detail-grid { grid-template-columns: 1fr 1fr; } }
+
+.quote-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+.quote-actions .btn { border: 0; cursor: pointer; flex: 1; }
+.quote-result { padding: 22px; position: sticky; top: 100px; align-self: start; }
+.quote-result-label { color: var(--text-muted); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; }
+.quote-price { font-family: 'Space Grotesk'; font-size: 2.8rem; font-weight: 900; color: var(--accent); margin: 8px 0; }
+.quote-result p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 14px; }
+.quote-summary {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 16px 0;
+}
+.quote-summary li {
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.035);
+  color: var(--text-main);
+  font-size: 0.86rem;
+}
+.quote-warning {
+  display: none;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: rgba(249, 115, 22, 0.08);
+  border: 1px solid rgba(249, 115, 22, 0.22);
+  color: #fed7aa;
+  font-size: 0.86rem;
+  margin: 12px 0;
+}
+.quote-warning.active { display: block; }
+@media (min-width: 769px) {
+  .quote-section { padding: 110px 5%; }
+  .quote-shell { grid-template-columns: 0.9fr 1.25fr 0.85fr; align-items: start; }
+  .quote-card { padding: 26px; }
+  .quote-options { grid-template-columns: 1fr 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="nav-wrapper reveal">
+  <nav>
+    <a href="#" class="nav-logo"><img src="imagens/LOGO.png" alt="Bez Clean"></a>
+    <ul class="nav-links">
+      <li><a href="#servicos">Especialidades</a></li>
+      <li><a href="#processos">Processos</a></li>
+      <li><a href="#vantagens">Vantagens</a></li>
+      <li><a href="#orcamento">Orçamento</a></li>
+    </ul>
+    <a href="#orcamento" class="btn btn-accent">Orçamento Rápido</a>
+  </nav>
+</div>
+
+<section class="hero">
+  <div class="snow-container" id="snow"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-badge">
+    <div class="badge-dot"></div>
+    ❄️ Secagem rápida mesmo em dias frios e chuvosos
+  </div>
+
+  <h1 class="reveal delay-1">Seu sofá limpo hoje. <span class="highlight-ice">Sem ficar dias esperando secar.</span></h1>
+
+  <p class="reveal delay-2">
+    Utilizamos extração profissional, bom enxágue e ventilação auxiliar para reduzir a umidade residual. Na maioria dos casos, o estofado seca no mesmo dia.
+  </p>
+
+  <div class="secagem-badge">
+    ✓ Extração profissional · Ventilação auxiliar · Seguro para pets e crianças
+  </div>
+
+  <div class="hero-actions reveal delay-3">
+    <a href="#orcamento" class="btn btn-pulse">Fazer Orçamento Rápido</a>
+    <a href="#resultados" class="btn btn-outline">Ver Resultados</a>
+  </div>
+
+  <div class="discount-pill">
+    <div class="discount-num">1min</div>
+    <div class="discount-label">
+      <strong>para simular</strong>
+      sofá, colchão e combos
+    </div>
+  </div>
+
+  <div class="urgency">
+    <div class="urgency-dot"></div>
+    Em processos muito pesados, a secagem pode finalizar no dia seguinte.
+  </div>
+
+  <div class="trust-row">
+    <div class="trust-item"><span>⭐ 5,0</span> no Google</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><span>500+</span> clientes atendidos</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><span>0%</span> taxa de deslocamento na região</div>
+  </div>
+
+  <div class="hero-gallery reveal delay-3">
+    <div class="hg-item hg-main"><img src="imagens/foto1-bez.jpg" alt="Profissionalismo Bez Clean"></div>
+    <div class="hg-item hg-video"><video class="lazy-video" muted loop playsinline data-src="imagens/video_entrada.mp4"><source type="video/mp4"></video></div>
+  </div>
+</section>
+
+<section class="process-section" id="processos">
+  <div class="section-header reveal" style="text-align: center; max-width: 600px; margin: 0 auto 40px;">
+    <span class="section-eyebrow">A Ciência da Restauração</span>
+    <h2>Nossos Processos em Ação</h2>
+  </div>
+  
+  <div class="carousel-wrapper reveal">
+    <div class="carousel-container" id="carouselContainer">
+      
+      <div class="process-card">
+        <video class="lazy-video carousel-video" muted loop playsinline data-src="imagens/processo_limpeza_sofa.mp4"><source type="video/mp4"></video>
+        <div class="play-hint"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="process-label">Processo: Extração de Estofados</div>
+      </div>
+
+      <div class="process-card">
+        <video class="lazy-video carousel-video" muted loop playsinline data-src="imagens/colchao_limpoXsujo_oficial.mp4"><source type="video/mp4"></video>
+        <div class="play-hint"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="process-label">Resultado: Colchão (Limpo vs Sujo)</div>
+      </div>
+
+      <div class="process-card">
+        <video class="lazy-video carousel-video" muted loop playsinline data-src="imagens/Processo_limpeza_banqueta_couro.mp4"><source type="video/mp4"></video>
+        <div class="play-hint"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="process-label">Tratamento: Limpeza e Cuidado de Couro</div>
+      </div>
+
+      <div class="process-card">
+        <video class="lazy-video carousel-video" muted loop playsinline data-src="imagens/interio_carro_limpoXsujo.mp4"><source type="video/mp4"></video>
+        <div class="play-hint"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="process-label">Antes & Depois: Estética Automotiva</div>
+      </div>
+
+    </div>
+
+    <div class="carousel-dots">
+      <div class="dot active" onclick="moveToSlide(0)"></div>
+      <div class="dot" onclick="moveToSlide(1)"></div>
+      <div class="dot" onclick="moveToSlide(2)"></div>
+      <div class="dot" onclick="moveToSlide(3)"></div>
+    </div>
+    <div class="carousel-nav">
+      <button class="carousel-nav-btn" onclick="prevSlide()">&#8592;</button>
+      <button class="carousel-nav-btn" onclick="nextSlide()">&#8594;</button>
+    </div>
+  </div>
+</section>
+
+<section class="bento-section" id="servicos">
+  <div class="section-header reveal"><span class="section-eyebrow">Nossas Especialidades</span><h2>Cuidado meticuloso em cada fibra.</h2></div>
+  <div class="bento-grid">
+    <div class="bento-card bento-large reveal"><div class="bento-content"><h3>Sofás & Poltronas</h3><p>Revitalização completa de tecidos, linho, veludo ou couro. Nossa extração remove ácaros, odores e devolve o aspecto original da peça.</p></div><div class="bento-icon">🛋️</div></div>
+    <div class="bento-card reveal delay-1"><div class="bento-content"><h3>Colchões</h3><p>Higienização profunda para noites de sono saudáveis, eliminando micro-organismos nocivos da sua cama.</p></div><div class="bento-icon">🛏️</div></div>
+    <div class="bento-card reveal"><div class="bento-content"><h3>Estética Interna</h3><p>Limpeza detalhada de veículos: bancos, teto, couro, laterais e partes internas estofadas. Seu carro novo de novo.</p></div><div class="bento-icon">🚗</div></div>
+    <div class="bento-card reveal delay-1"><div class="bento-content"><h3>Cadeiras & Puffs</h3><p>Renovação para as cadeiras da sua sala de jantar ou escritório, com secagem rápida e segura.</p></div><div class="bento-icon">🪑</div></div>
+    <div class="bento-card reveal delay-2"><div class="bento-content"><h3>Hidratação de Couro</h3><p>Tratamento premium para limpeza e cuidado de couro em sofás, poltronas e bancos automotivos.</p></div><div class="bento-icon">✨</div></div>
+  </div>
+</section>
+
+
+
+<section class="quote-section" id="orcamento">
+  <div class="quote-shell reveal">
+    <div class="quote-intro">
+      <span class="section-eyebrow">Orçamento Direto</span>
+      <h2>Monte seu orçamento com um ou mais estofados.</h2>
+      <p>Escolha todos os itens que deseja higienizar, informe os detalhes e receba uma estimativa inicial para enviar ao WhatsApp.</p>
+      <div class="quote-note">✓ Ideal para combos como sofá + colchão · Valor estimado em menos de 1 minuto · Atendimento a domicílio</div>
+    </div>
+
+    <div class="quote-card" data-quote-app>
+      <div class="quote-progress"><div class="quote-progress-bar" id="quoteProgress"></div></div>
+
+      <div class="quote-step active" data-step="0">
+        <small>Passo 1 de 5</small>
+        <h3>O que você deseja higienizar?</h3>
+        <p class="quote-fineprint" style="margin-top:-6px;margin-bottom:14px;">Pode selecionar mais de uma opção.</p>
+        <div class="quote-options" data-field="items">
+          <button class="quote-option" type="button" data-value="sofa"><strong>Sofá</strong><span>2, 3, 4 lugares ou maior</span></button>
+          <button class="quote-option" type="button" data-value="colchao"><strong>Colchão</strong><span>Solteiro, casal, queen ou king</span></button>
+          <button class="quote-option" type="button" data-value="cadeiras"><strong>Cadeiras</strong><span>Sala de jantar ou escritório</span></button>
+          <button class="quote-option" type="button" data-value="poltrona"><strong>Poltrona / puff</strong><span>Peças individuais</span></button>
+          <button class="quote-option" type="button" data-value="automotivo"><strong>Interior automotivo</strong><span>Bancos e partes estofadas</span></button>
+          <button class="quote-option" type="button" data-value="outro"><strong>Outro estofado</strong><span>Cabeceira, recamier, divã etc.</span></button>
+        </div>
+        <div class="quote-actions">
+          <button class="btn btn-accent" type="button" onclick="quoteNext()">Continuar</button>
+        </div>
+      </div>
+
+      <div class="quote-step" data-step="1">
+        <small>Passo 2 de 5</small>
+        <h3>Detalhes dos itens escolhidos</h3>
+        <div id="quoteDetailsWrap" class="quote-details-wrap"></div>
+        <p class="quote-fineprint">Obs.: simulação focada em higienização de estofados. Casos fora do padrão são confirmados pela equipe.</p>
+        <div class="quote-actions">
+          <button class="btn btn-outline" type="button" onclick="quotePrev()">Voltar</button>
+          <button class="btn btn-accent" type="button" onclick="quoteNext()">Continuar</button>
+        </div>
+      </div>
+
+      <div class="quote-step" data-step="2">
+        <small>Passo 3 de 5</small>
+        <h3>Como está o nível geral de sujeira?</h3>
+        <div class="quote-options" data-field="condition">
+          <button class="quote-option" type="button" data-value="leve"><strong>Leve</strong><span>Manutenção, poeira e uso normal</span></button>
+          <button class="quote-option" type="button" data-value="medio"><strong>Médio</strong><span>Sujeira visível ou uso intenso</span></button>
+          <button class="quote-option" type="button" data-value="pesado"><strong>Pesado</strong><span>Manchas, odor, pet ou situação crítica</span></button>
+        </div>
+      </div>
+
+      <div class="quote-step" data-step="3">
+        <small>Passo 4 de 5</small>
+        <h3>Onde será o atendimento?</h3>
+        <input class="quote-field" id="quoteCity" type="text" placeholder="Ex.: Balneário Camboriú, Camboriú, Itapema...">
+        <div class="quote-actions">
+          <button class="btn btn-outline" type="button" onclick="quotePrev()">Voltar</button>
+          <button class="btn btn-accent" type="button" onclick="quoteNext()">Continuar</button>
+        </div>
+      </div>
+
+      <div class="quote-step" data-step="4">
+        <small>Passo 5 de 5</small>
+        <h3>Alguma observação?</h3>
+        <textarea class="quote-field" id="quoteNotes" rows="4" placeholder="Ex.: tem pet, mancha de urina, mofo, muito tempo sem limpar..."></textarea>
+        <div class="quote-actions">
+          <button class="btn btn-outline" type="button" onclick="quotePrev()">Voltar</button>
+          <button class="btn btn-accent" type="button" onclick="quoteFinish()">Ver estimativa</button>
+        </div>
+      </div>
+
+      <div class="quote-actions" id="quoteBackOnly" style="display:none;">
+        <button class="btn btn-outline" type="button" onclick="quotePrev()">Voltar</button>
+      </div>
+    </div>
+
+    <aside class="quote-result">
+      <div class="quote-result-label">Estimativa inicial</div>
+      <div class="quote-price" id="quotePrice">—</div>
+      <p id="quoteResultText">Selecione um ou mais itens para gerar uma estimativa. O valor final é confirmado pelo WhatsApp após avaliação.</p>
+      <div class="quote-warning" id="quoteWarning"></div>
+      <ul class="quote-summary" id="quoteSummary">
+        <li>Serviço: limpeza profissional de estofados</li>
+        <li>Região: Balneário Camboriú e região sem deslocamento</li>
+      </ul>
+      <a class="btn btn-accent" id="quoteWhatsapp" href="https://wa.me/5547997545892?text=*Olá!* Quero fazer um orçamento de limpeza de estofado." target="_blank" style="width:100%;">Enviar pelo WhatsApp</a>
+    </aside>
+  </div>
+</section>
+
+<section class="promo-section" id="vantagens">
+  <div class="promo-container">
+    <div class="promo-content reveal"><span class="section-eyebrow">Vantagens Bez Clean</span><h2>O melhor para quem conhece qualidade.</h2><p>Condições exclusivas para manter o seu ambiente sempre impecável, valorizando nossos clientes.</p><a href="#orcamento" class="btn btn-accent">Fazer Orçamento Rápido</a></div>
+    <div class="promo-cards">
+      <div class="p-card reveal delay-1"><div class="p-card-icon">%</div><div class="p-card-text"><h4>Cliente Fidelidade</h4><p>Para clientes com última higienização há até 1 ano, oferecemos <strong>30% de desconto</strong>.</p></div></div>
+      <div class="p-card reveal delay-2"><div class="p-card-icon">+</div><div class="p-card-text"><h4>Combo Promocional</h4><p>Condição especial ao agendar a higienização de <strong>Sofá + Colchão</strong> juntos.</p></div></div>
+      <div class="p-card reveal delay-3"><div class="p-card-icon">📍</div><div class="p-card-text"><h4>Logística Premium</h4><p>Atendimento à domicílio sem taxa de deslocamento na nossa região de cobertura.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="portfolio" id="resultados">
+  <div class="section-header reveal"><span class="section-eyebrow">Resultados Reais</span><h2>Veja a diferença na prática.</h2></div>
+  <div class="portfolio-grid">
+    <div class="pt-item reveal"><video class="lazy-video" muted loop playsinline data-src="imagens/video-bez1.mp4"><source type="video/mp4"></video><div class="pt-overlay">Sofá Renovado</div></div>
+    <div class="pt-item reveal delay-1"><video class="lazy-video" muted loop playsinline data-src="imagens/video-bez2.mp4"><source type="video/mp4"></video><div class="pt-overlay">Resultado Imediato</div></div>
+  </div>
+</section>
+
+<section class="faq-section">
+  <div class="section-header reveal" style="text-align: center; max-width: 600px; margin: 0 auto 40px;">
+    <span class="section-eyebrow">Dúvidas Frequentes</span>
+    <h2>Respostas Transparentes</h2>
+  </div>
+  <div class="faq-container reveal">
+    
+    <div class="faq-item">
+      <button class="faq-trigger">Quanto tempo demora para secar?<span class="faq-icon">+</span></button>
+      <div class="faq-answer"><p>Graças ao nosso sistema de extração de alta potência, o estofado fica apenas levemente úmido. O tempo médio de secagem completa varia entre 4 a 12 horas, dependendo do tipo de tecido e da ventilação do ambiente.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-trigger">Os produtos usados são seguros para pets e crianças?<span class="faq-icon">+</span></button>
+      <div class="faq-answer"><p>Sim, absolutamente. Utilizamos apenas produtos profissionais certificados, biodegradáveis e dermatologicamente testados. Eles são totalmente seguros para crianças e animais de estimação, eliminando bactérias sem deixar resíduos tóxicos.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-trigger">Vocês removem qualquer tipo de mancha e odor?<span class="faq-icon">+</span></button>
+      <div class="faq-answer"><p>Removemos com sucesso até 90% das manchas comuns (como café, suco e sujeira do dia a dia) e 100% dos odores biológicos (como urina de pet e mofo). No entanto, manchas causadas por queimaduras, tintura de cabelo ou desgaste do próprio tecido não podem ser revertidas.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-trigger">Quais cidades vocês atendem?<span class="faq-icon">+</span></button>
+      <div class="faq-answer"><p>Atendemos Balneário Camboriú e região sem taxa de deslocamento. Outras cidades próximas podem ser avaliadas sob consulta e podem ter taxa adicional de deslocamento.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-trigger">Quais são as formas de pagamento?<span class="faq-icon">+</span></button>
+      <div class="faq-answer"><p>Para sua total comodidade, aceitamos pagamentos via PIX, dinheiro e cartões de crédito com opções de parcelamento. O pagamento é realizado apenas após a finalização e conferência do serviço.</p></div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top reveal">
+    <div class="footer-brand"><img src="imagens/LOGO.png" alt="Bez Clean"><p>Elevando o padrão de conforto e saúde do seu lar ou veículo através de higienização profissional de alto nível.</p></div>
+    <div class="footer-col"><h4>Serviços</h4><ul><li><a href="#">Sofás e Poltronas</a></li><li><a href="#">Colchões</a></li><li><a href="#">Interior Automotivo</a></li><li><a href="#">Couro e estofados especiais</a></li></ul></div>
+    <div class="footer-col"><h4>Contato</h4><ul><li><a href="https://wa.me/5547997545892">(47) 99754-5892</a></li><li><a href="mailto:contato@bezclean.com.br">contato@bezclean.com.br</a></li><li><a href="#">Atendimento a domicílio</a></li><li><a href="#">Balneário Camboriú, Itajaí, Camboriú, Itapema, Navegantes</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 Bez Clean. Todos os direitos reservados.</p><p>Design <a href="https://instagram.com/zeqmiranda21" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:600;">zeqmiranda</a></p></div>
+</footer>
+
+<script>
+// ── NEVE ANIMADA ──
+const snow = document.getElementById('snow');
+for (let i = 0; i < 30; i++) {
+  const flake = document.createElement('div');
+  flake.className = 'snowflake';
+  flake.textContent = '❄';
+  flake.style.cssText = `
+    left: ${Math.random() * 100}%;
+    font-size: ${0.6 + Math.random() * 0.8}rem;
+    opacity: ${0.3 + Math.random() * 0.5};
+    animation-duration: ${5 + Math.random() * 8}s;
+    animation-delay: ${-Math.random() * 10}s;
+    color: rgba(125, 211, 252, ${0.2 + Math.random() * 0.4});
+  `;
+  snow.appendChild(flake);
+}
+</script>
+
+<script>
+// ── REVEAL ON SCROLL ──
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('in-view'); });
+}, { threshold: 0.05 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ── FAQ ──
+document.querySelectorAll('.faq-trigger').forEach(trigger => {
+  trigger.addEventListener('click', () => trigger.parentElement.classList.toggle('active'));
+});
+
+// ── LAZY LOAD DE VÍDEOS ──
+// Carrega o src só quando o vídeo entra no viewport
+function loadVideo(video) {
+  if (video.dataset.loaded) return;
+  const src = video.dataset.src;
+  if (!src) return;
+  video.querySelector('source').src = src;
+  video.load();
+  video.dataset.loaded = 'true';
+}
+
+const isMobile = () => window.innerWidth <= 768;
+
+// ── LÓGICA DE PLAY/PAUSE ──
+function playVideo(video) {
+  loadVideo(video);
+  video.play().catch(() => {});
+}
+function pauseVideo(video) {
+  video.pause();
+}
+
+// ── VÍDEOS GERAIS (hero + portfolio): play quando visível, pause quando sair ──
+const generalVideos = document.querySelectorAll('.lazy-video:not(.carousel-video)');
+
+const generalObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    const video = entry.target;
+    if (entry.isIntersecting) {
+      loadVideo(video);
+      // No desktop o hero video roda sempre que visível
+      // Portfolio: só roda se visível (sem hover necessário)
+      playVideo(video);
+    } else {
+      pauseVideo(video);
+    }
+  });
+}, { threshold: 0.3 });
+
+generalVideos.forEach(v => generalObserver.observe(v));
+
+// ── CARROSSEL: VÍDEOS ──
+const carouselVideos = document.querySelectorAll('.carousel-video');
+
+// DESKTOP: carrega o vídeo pausado (mostra primeiro frame) e hover para tocar
+function setupDesktopHover() {
+  carouselVideos.forEach(video => {
+    // Carrega e pausa imediatamente — exibe o primeiro frame como thumbnail
+    loadVideo(video);
+    video.addEventListener('loadeddata', () => { video.pause(); }, { once: true });
+
+    const card = video.closest('.process-card');
+    card.addEventListener('mouseenter', () => playVideo(video));
+    card.addEventListener('mouseleave', () => pauseVideo(video));
+  });
+}
+
+// MOBILE: só o slide ativo roda
+function playActiveSlide(index) {
+  carouselVideos.forEach((video, i) => {
+    if (i === index) playVideo(video);
+    else pauseVideo(video);
+  });
+}
+
+// ── CARROSSEL NAVIGATION ──
+let currentSlide = 0;
+const totalSlides = 4;
+const container = document.getElementById('carouselContainer');
+const dots = document.querySelectorAll('.dot');
+
+function moveToSlide(slideIndex) {
+  if (!isMobile()) return;
+  currentSlide = slideIndex;
+
+  // Calcula o offset: cada card é 88% + 16px de margem
+  const cardWidth = container.querySelector('.process-card').offsetWidth + 16;
+  container.style.transform = `translateX(-${currentSlide * cardWidth}px)`;
+
+  dots.forEach(dot => dot.classList.remove('active'));
+  if (dots[currentSlide]) dots[currentSlide].classList.add('active');
+
+  playActiveSlide(currentSlide);
+}
+
+function nextSlide() { moveToSlide(currentSlide < totalSlides - 1 ? currentSlide + 1 : 0); }
+function prevSlide() { moveToSlide(currentSlide > 0 ? currentSlide - 1 : totalSlides - 1); }
+
+// Swipe touch
+let startX = 0;
+container.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
+container.addEventListener('touchend', e => {
+  const diffX = startX - e.changedTouches[0].clientX;
+  if (Math.abs(diffX) > 50) diffX > 0 ? nextSlide() : prevSlide();
+});
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', () => {
+  if (isMobile()) {
+    // Mobile: inicia o slide 0 tocando, sem autoplay
+    playActiveSlide(0);
+  } else {
+    // Desktop: configura hover
+    setupDesktopHover();
+  }
+  // Popup removido para não interromper quem está fazendo o orçamento.
+});
+
+
+
+// ── ORÇAMENTO DIRETO ──
+// Preços vindos do Google Sheets via Apps Script. Se der erro, usa a tabela local abaixo.
+const PRICING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyM8vdSwMdO2NqY5v9q-t9-nTGS9GjiKU_JIAJFCxTRWyupnscNlCT9Ad-bWj2mwy2JDw/exec';
+let PRICE_TABLE = {
+  sofa: {
+    label: 'Sofá',
+    sizes: {
+      '2_lugares': { label: '2 lugares', price: 180 },
+      '3_lugares': { label: '3 lugares', price: 220 },
+      '4_lugares': { label: '4 lugares', price: 280 },
+      '5_mais': { label: '5 lugares ou maior', price: 340 }
+    }
+  },
+  colchao: {
+    label: 'Colchão',
+    sizes: {
+      'solteiro': { label: 'Solteiro', price: 150 },
+      'casal': { label: 'Casal', price: 190 },
+      'queen': { label: 'Queen', price: 220 },
+      'king': { label: 'King', price: 260 }
+    }
+  },
+  cadeiras: {
+    label: 'Cadeiras',
+    sizes: {
+      '2': { label: 'Até 2 cadeiras', price: 120 },
+      '4': { label: '4 cadeiras', price: 180 },
+      '6': { label: '6 cadeiras', price: 240 },
+      '8': { label: '8 ou mais cadeiras', price: 300 }
+    }
+  },
+  poltrona: {
+    label: 'Poltrona / puff',
+    sizes: {
+      '1': { label: '1 peça', price: 120 },
+      '2': { label: '2 peças', price: 200 },
+      '3_mais': { label: '3 peças ou mais', price: 280 }
+    }
+  },
+  automotivo: {
+    label: 'Interior automotivo',
+    sizes: {
+      'bancos': { label: 'Bancos estofados', price: 240 },
+      'completo': { label: 'Interno completo', price: 360 }
+    }
+  },
+  outro: {
+    label: 'Outro estofado',
+    sizes: {
+      'avaliar': { label: 'Avaliar pelo WhatsApp', price: 0 }
+    }
+  }
+};
+let MODEL_RULES = {
+  comum: { label: 'Comum', addition: 0 },
+  retratil: { label: 'Retrátil / reclinável', addition: 60 },
+  chaise: { label: 'Com chaise', addition: 40 },
+  retratil_chaise: { label: 'Retrátil + chaise', addition: 90 }
+};
+let CONDITION_RULES = {
+  leve: { label: 'Sujeira leve', multiplier: 1 },
+  medio: { label: 'Sujeira média', multiplier: 1.18 },
+  pesado: { label: 'Sujeira pesada / manchas / odor', multiplier: 1.35 }
+};
+let COMBO_RULES = { min_items: 2, discount: 30, label: 'Desconto combo' };
+const FREE_REGION_TERMS = ['balneario camboriu', 'balneário camboriú', 'bc', 'camboriu', 'camboriú', 'itajai', 'itajaí', 'itapema', 'navegantes', 'porto belo', 'picarras', 'piçarras'];
+let quoteState = { step: 0, items: [], details: {}, condition: '', city: '', notes: '', price: null };
+
+function normalizeText(text) {
+  return (text || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+}
+function formatBRL(value) {
+  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+function parseMoney(value) {
+  if (typeof value === 'number') return value;
+  const clean = (value || '').toString().replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
+  return Number(clean) || 0;
+}
+function isRowActive(row) {
+  const active = (row.ativo ?? row.status ?? 'sim').toString().toLowerCase().trim();
+  return !['não', 'nao', 'false', '0', 'inativo'].includes(active);
+}
+function getRowValue(row, keys) {
+  for (const key of keys) if (row[key] !== undefined && row[key] !== '') return row[key];
+  return '';
+}
+function applyRemoteRows(rows) {
+  const serviceKeys = Object.keys(PRICE_TABLE);
+  rows.forEach(row => {
+    if (!row || !isRowActive(row)) return;
+    const category = normalizeText(getRowValue(row, ['categoria', 'category']));
+    const item = (getRowValue(row, ['item', 'codigo', 'key']) || '').toString().trim();
+    const label = (getRowValue(row, ['label', 'nome', 'descricao', 'descrição']) || item).toString().trim();
+    const value = parseMoney(getRowValue(row, ['valor', 'preco', 'preço', 'price']));
+
+    if (serviceKeys.includes(category) && item) {
+      PRICE_TABLE[category].sizes[item] = { label, price: value };
+    }
+    if (['sofa_modelo', 'modelo_sofa'].includes(category) && item) {
+      MODEL_RULES[item] = { label, addition: value };
+    }
+    if (['combo', 'desconto_combo'].includes(category)) {
+      if (item === 'min_items') COMBO_RULES.min_items = value;
+      if (item === 'discount') COMBO_RULES.discount = value;
+      if (item === 'label') COMBO_RULES.label = label;
+    }
+  });
+}
+async function loadRemotePrices() {
+  if (!PRICING_ENDPOINT) return;
+  try {
+    const response = await fetch(PRICING_ENDPOINT, { cache: 'no-store' });
+    const data = await response.json();
+    if (Array.isArray(data)) applyRemoteRows(data);
+    else if (data && data.items) PRICE_TABLE = data.items;
+    renderDetails();
+  } catch (error) {
+    console.warn('Não foi possível carregar preços externos. Usando tabela local.', error);
+  }
+}
+function ensureDetail(itemKey) {
+  if (!quoteState.details[itemKey]) {
+    const firstSize = Object.keys(PRICE_TABLE[itemKey].sizes)[0] || '';
+    quoteState.details[itemKey] = { size: firstSize, model: 'comum', description: '' };
+  }
+}
+function toggleQuoteItem(value, btn) {
+  if (quoteState.items.includes(value)) {
+    quoteState.items = quoteState.items.filter(item => item !== value);
+    delete quoteState.details[value];
+    btn.classList.remove('selected');
+  } else {
+    quoteState.items.push(value);
+    ensureDetail(value);
+    btn.classList.add('selected');
+  }
+}
+function renderDetails() {
+  const wrap = document.getElementById('quoteDetailsWrap');
+  if (!wrap) return;
+  if (!quoteState.items.length) {
+    wrap.innerHTML = '<p class="quote-fineprint">Volte e selecione pelo menos um estofado.</p>';
+    return;
+  }
+  quoteState.items.forEach(ensureDetail);
+  wrap.innerHTML = quoteState.items.map(itemKey => {
+    const item = PRICE_TABLE[itemKey];
+    const detail = quoteState.details[itemKey];
+    const sizeOptions = Object.entries(item.sizes).map(([key, opt]) =>
+      `<option value="${key}" ${detail.size === key ? 'selected' : ''}>${opt.label} — ${opt.price > 0 ? formatBRL(opt.price) : 'sob avaliação'}</option>`
+    ).join('');
+    const modelSelect = itemKey === 'sofa' ? `
+      <div>
+        <label class="quote-field-label">Modelo do sofá</label>
+        <select class="quote-field" data-detail-field="model" data-item="${itemKey}">
+          ${Object.entries(MODEL_RULES).map(([key, opt]) => `<option value="${key}" ${detail.model === key ? 'selected' : ''}>${opt.label}${opt.addition ? ' +' + formatBRL(opt.addition) : ''}</option>`).join('')}
+        </select>
+      </div>` : '';
+    const otherField = itemKey === 'outro' ? `
+      <div>
+        <label class="quote-field-label">Qual estofado?</label>
+        <input class="quote-field" data-detail-field="description" data-item="${itemKey}" value="${detail.description || ''}" placeholder="Ex.: cabeceira, recamier, divã...">
+      </div>` : '';
+    return `
+      <div class="quote-detail-card">
+        <h4>${item.label}</h4>
+        <div class="quote-detail-grid">
+          <div>
+            <label class="quote-field-label">Tamanho / quantidade</label>
+            <select class="quote-field" data-detail-field="size" data-item="${itemKey}">${sizeOptions}</select>
+          </div>
+          ${modelSelect}
+          ${otherField}
+        </div>
+      </div>`;
+  }).join('');
+  wrap.querySelectorAll('[data-detail-field]').forEach(input => {
+    input.addEventListener('change', handleDetailChange);
+    input.addEventListener('input', handleDetailChange);
+  });
+}
+function handleDetailChange(event) {
+  const itemKey = event.target.dataset.item;
+  const field = event.target.dataset.detailField;
+  ensureDetail(itemKey);
+  quoteState.details[itemKey][field] = event.target.value;
+}
+function updateQuoteProgress() {
+  const bar = document.getElementById('quoteProgress');
+  if (bar) bar.style.width = `${((quoteState.step + 1) / 5) * 100}%`;
+  document.querySelectorAll('.quote-step').forEach(step => step.classList.toggle('active', Number(step.dataset.step) === quoteState.step));
+  const back = document.getElementById('quoteBackOnly');
+  if (back) back.style.display = quoteState.step > 1 && quoteState.step < 3 ? 'flex' : 'none';
+}
+function selectQuoteOption(field, value, btn) {
+  if (field === 'items') {
+    toggleQuoteItem(value, btn);
+    return;
+  }
+  quoteState[field] = value;
+  btn.closest('.quote-options').querySelectorAll('.quote-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  setTimeout(() => quoteNext(), 160);
+}
+function quoteNext() {
+  if (quoteState.step === 0 && !quoteState.items.length) {
+    const warning = document.getElementById('quoteWarning');
+    warning.textContent = 'Selecione pelo menos um estofado para continuar.';
+    warning.classList.add('active');
+    return;
+  }
+  document.getElementById('quoteWarning').classList.remove('active');
+  if (quoteState.step === 0) renderDetails();
+  if (quoteState.step === 3) quoteState.city = document.getElementById('quoteCity').value;
+  if (quoteState.step < 4) quoteState.step += 1;
+  updateQuoteProgress();
+}
+function quotePrev() {
+  if (quoteState.step > 0) quoteState.step -= 1;
+  updateQuoteProgress();
+}
+function quoteFinish() {
+  quoteState.city = document.getElementById('quoteCity').value;
+  quoteState.notes = document.getElementById('quoteNotes').value;
+  calculateQuote();
+}
+function calculateQuote() {
+  if (!quoteState.items.length || !quoteState.condition) return;
+  const condition = CONDITION_RULES[quoteState.condition];
+  const city = normalizeText(quoteState.city);
+  const inFreeRegion = FREE_REGION_TERMS.some(term => city.includes(normalizeText(term)));
+  let lines = [];
+  let subtotal = 0;
+  let needsManual = false;
+
+  quoteState.items.forEach(itemKey => {
+    ensureDetail(itemKey);
+    const item = PRICE_TABLE[itemKey];
+    const detail = quoteState.details[itemKey];
+    const size = item.sizes[detail.size] || Object.values(item.sizes)[0];
+    const model = MODEL_RULES[detail.model] || MODEL_RULES.comum;
+    if (itemKey === 'outro' || !size || size.price <= 0) needsManual = true;
+    const raw = (size?.price || 0) + (itemKey === 'sofa' ? model.addition : 0);
+    const itemTotal = Math.round((raw * condition.multiplier) / 10) * 10;
+    subtotal += itemTotal;
+    lines.push({ itemKey, label: item.label, sizeLabel: size?.label || 'sob avaliação', modelLabel: itemKey === 'sofa' ? model.label : '', description: detail.description || '', total: itemTotal });
+  });
+
+  const comboApplies = !needsManual && quoteState.items.length >= COMBO_RULES.min_items && COMBO_RULES.discount > 0;
+  const finalPrice = Math.max(0, subtotal - (comboApplies ? COMBO_RULES.discount : 0));
+  const rangeMax = Math.round((finalPrice * 1.12) / 10) * 10;
+  quoteState.price = finalPrice;
+
+  document.getElementById('quotePrice').textContent = needsManual ? 'Sob avaliação' : `${formatBRL(finalPrice)} – ${formatBRL(rangeMax)}`;
+  document.getElementById('quoteResultText').textContent = needsManual
+    ? 'Algum item precisa de avaliação rápida. Envie pelo WhatsApp para a equipe confirmar o melhor orçamento.'
+    : 'Esta é uma estimativa automática em faixa. A equipe confirma o valor final pelo WhatsApp conforme fotos, tecido e estado real do estofado.';
+
+  const warning = document.getElementById('quoteWarning');
+  if (quoteState.city && !inFreeRegion) {
+    warning.textContent = 'Sua cidade pode exigir análise de atendimento e possível taxa de deslocamento.';
+    warning.classList.add('active');
+  } else {
+    warning.textContent = '';
+    warning.classList.remove('active');
+  }
+
+  const summaryLines = lines.map(line => `
+    <li>${line.label}: ${line.sizeLabel}${line.modelLabel ? ' · ' + line.modelLabel : ''}${line.description ? ' · ' + line.description : ''}${!needsManual ? ' · ' + formatBRL(line.total) : ''}</li>
+  `).join('');
+  document.getElementById('quoteSummary').innerHTML = `
+    ${summaryLines}
+    <li>Condição geral: ${condition.label}</li>
+    ${comboApplies ? `<li class="quote-combo-line">${COMBO_RULES.label}: -${formatBRL(COMBO_RULES.discount)}</li>` : ''}
+    <li>Local: ${quoteState.city || 'não informado'}</li>
+  `;
+
+  const whatsappLines = lines.map(line =>
+    `• ${line.label}: ${line.sizeLabel}${line.modelLabel ? ' | ' + line.modelLabel : ''}${line.description ? ' | ' + line.description : ''}${!needsManual ? ' | ' + formatBRL(line.total) : ''}`
+  ).join('%0A');
+  const priceLine = needsManual ? 'Estimativa exibida no site: sob avaliação' : `Estimativa exibida no site: ${formatBRL(finalPrice)} a ${formatBRL(rangeMax)}`;
+  const comboLine = comboApplies ? `%0A${COMBO_RULES.label}: -${formatBRL(COMBO_RULES.discount)}` : '';
+  const message = `*Olá! Quero confirmar um orçamento da Bez Clean.*%0A%0A` +
+    `Itens:%0A${whatsappLines}%0A%0A` +
+    `Condição geral: ${condition.label}%0A` +
+    `Cidade/bairro: ${quoteState.city || 'não informado'}%0A` +
+    `${priceLine}${comboLine}%0A` +
+    `${quoteState.notes ? `Observações: ${quoteState.notes}%0A` : ''}` +
+    `%0APodem confirmar o valor final?`;
+  document.getElementById('quoteWhatsapp').href = `https://wa.me/5547997545892?text=${message}`;
+}
+
+document.querySelectorAll('[data-quote-app] .quote-options').forEach(group => {
+  group.querySelectorAll('.quote-option').forEach(btn => {
+    btn.addEventListener('click', () => selectQuoteOption(group.dataset.field, btn.dataset.value, btn));
+  });
+});
+loadRemotePrices();
+function stopAutoplay() {}
+
+// Reinit se redimensionar (ex: girar tela)
+window.addEventListener('resize', () => {
+  if (!isMobile()) {
+    container.style.transform = 'none';
+    setupDesktopHover();
+  } else {
+    moveToSlide(currentSlide);
+  }
+});
+</script>
+</body>
+</html>
