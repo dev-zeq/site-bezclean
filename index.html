@@ -769,6 +769,76 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
   margin: 12px 0;
 }
 .quote-warning.active { display: block; }
+
+/* ── PARCELAMENTO ── */
+.quote-installments {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin: 14px 0;
+  background: rgba(255,255,255,0.03);
+}
+.qi-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.qi-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.qi-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  text-align: center;
+  gap: 2px;
+  position: relative;
+}
+.qi-best {
+  border-color: rgba(163,230,53,0.4);
+  background: rgba(163,230,53,0.06);
+}
+.qi-badge {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: var(--dark-bg);
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+.qi-parcela {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+.qi-valor {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+.qi-best .qi-valor { color: var(--accent); }
+.qi-note {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+  line-height: 1.4;
+  opacity: 0.6;
+}
 @media (min-width: 769px) {
   .quote-section { padding: 110px 5%; }
   .quote-shell { grid-template-columns: 0.9fr 1.25fr 0.85fr; align-items: start; }
@@ -975,8 +1045,9 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
 
       <div class="quote-step" data-step="4">
         <small>Passo 5 de 5</small>
-        <h3>Alguma observação?</h3>
-        <textarea class="quote-field" id="quoteNotes" rows="4" placeholder="Ex.: tem pet, mancha de urina, mofo, muito tempo sem limpar..."></textarea>
+        <h3>Alguma observação? <span style="font-size:0.75rem;font-weight:400;opacity:0.5">(opcional)</span></h3>
+        <p class="quote-fineprint" style="margin-top:-6px;margin-bottom:12px;">Se não tiver, pode clicar direto em "Ver estimativa".</p>
+        <textarea class="quote-field" id="quoteNotes" rows="3" placeholder="Ex.: tem pet, mancha de urina, mofo, muito tempo sem limpar..."></textarea>
         <div class="quote-actions">
           <button class="btn btn-outline" type="button" onclick="quotePrev()">Voltar</button>
           <button class="btn btn-accent" type="button" onclick="quoteFinish()">Ver estimativa</button>
@@ -993,11 +1064,19 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
       <div class="quote-price" id="quotePrice">—</div>
       <p id="quoteResultText">Selecione um ou mais itens para gerar uma estimativa. O valor final é confirmado pelo WhatsApp após avaliação.</p>
       <div class="quote-warning" id="quoteWarning"></div>
+
+      <!-- PARCELAMENTO -->
+      <div class="quote-installments" id="quoteInstallments" style="display:none">
+        <div class="qi-title">💳 Opções de pagamento</div>
+        <div class="qi-options" id="quoteInstallmentOptions"></div>
+        <div class="qi-note">Parcelamento sujeito a confirmação. Valor final definido pelo WhatsApp.</div>
+      </div>
+
       <ul class="quote-summary" id="quoteSummary">
         <li>Serviço: limpeza profissional de estofados</li>
         <li>Região: Balneário Camboriú e região sem deslocamento</li>
       </ul>
-      <a class="btn btn-accent" id="quoteWhatsapp" href="https://wa.me/5547997545892?text=*Olá!* Quero fazer um orçamento de limpeza de estofado." target="_blank" style="width:100%;">Enviar pelo WhatsApp</a>
+      <a class="btn btn-accent" id="quoteWhatsapp" href="https://wa.me/5547997545892?text=*Olá!* Quero fazer um orçamento de limpeza de estofado." target="_blank" style="width:100%;">Confirmar pelo WhatsApp →</a>
     </aside>
   </div>
 </section>
@@ -1393,7 +1472,7 @@ function renderDetails() {
     const modelKey = detail.model || 'comum';
     const sizeOptions = Object.entries(item.sizes).map(([key, opt]) => {
       const label = itemKey === 'sofa' ? getSofaSizeLabel(key, modelKey, opt.label) : opt.label;
-      return `<option value="${key}" ${detail.size === key ? 'selected' : ''}>${label} — ${opt.price > 0 ? formatBRL(opt.price) : 'sob avaliação'}</option>`;
+      return `<option value="${key}" ${detail.size === key ? 'selected' : ''}>${label}</option>`;
     }).join('');
     const modelSelect = itemKey === 'sofa' ? `
       <div>
@@ -1523,6 +1602,30 @@ function calculateQuote() {
   document.getElementById('quoteResultText').textContent = needsManual
     ? 'Algum item precisa de avaliação rápida. Envie pelo WhatsApp para a equipe confirmar o melhor orçamento.'
     : 'Esta é uma estimativa automática em faixa. A equipe confirma o valor final pelo WhatsApp conforme fotos, tecido e estado real do estofado.';
+
+  // ── PARCELAMENTO ──
+  const installmentsEl = document.getElementById('quoteInstallments');
+  const installmentsOptsEl = document.getElementById('quoteInstallmentOptions');
+  if (!needsManual && finalPrice > 0) {
+    const MACHINE_RATE = 0.14; // taxa da maquininha embutida, não exibida
+    const plans = [
+      { parcelas: 1, label: 'À vista' },
+      { parcelas: 2 },
+      { parcelas: 3 },
+    ];
+    installmentsOptsEl.innerHTML = plans.map(plan => {
+      const grossValue = finalPrice / (1 - MACHINE_RATE);
+      const parcelValue = grossValue / plan.parcelas;
+      const formattedParcel = formatBRL(Math.ceil(parcelValue / 5) * 5); // arredonda pra R$5 acima
+      if (plan.parcelas === 1) {
+        return `<div class="qi-option qi-best"><span class="qi-badge">Melhor opção</span><span class="qi-parcela">À vista</span><span class="qi-valor">${formatBRL(finalPrice)}</span></div>`;
+      }
+      return `<div class="qi-option"><span class="qi-parcela">${plan.parcelas}x de</span><span class="qi-valor">${formattedParcel}</span></div>`;
+    }).join('');
+    installmentsEl.style.display = 'block';
+  } else {
+    installmentsEl.style.display = 'none';
+  }
 
   const warning = document.getElementById('quoteWarning');
   if (quoteState.city && !inFreeRegion) {
