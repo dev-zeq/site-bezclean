@@ -847,6 +847,66 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
 }
 
 
+
+/* ── CAPTURA DE LEAD / FOTO ── */
+.quote-lead-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin: 14px 0;
+  background: rgba(125, 211, 252, 0.045);
+}
+.quote-lead-card h4 {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+.quote-lead-card p {
+  font-size: 0.78rem;
+  margin-bottom: 12px;
+  color: var(--text-muted);
+}
+.quote-lead-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+.quote-mini-field {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--white);
+  padding: 12px 13px;
+  font: inherit;
+  font-size: 0.84rem;
+  outline: none;
+}
+.quote-mini-field:focus { border-color: var(--border-active); }
+.quote-secondary-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+.btn-soft {
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  background: rgba(125, 211, 252, 0.08);
+  color: var(--ice);
+}
+.btn-soft:hover {
+  background: rgba(125, 211, 252, 0.14);
+  transform: translateY(-1px);
+}
+.quote-human-note {
+  font-size: 0.72rem !important;
+  color: var(--text-muted) !important;
+  opacity: 0.82;
+  margin: 10px 0 0 !important;
+}
+@media (min-width: 769px) {
+  .quote-secondary-actions { grid-template-columns: 1fr; }
+}
+
 /* Ajuste mobile: mantém o orçamento centralizado ao avançar etapas */
 .quote-section, .quote-card { scroll-margin-top: 96px; }
 @media (max-width: 768px) {
@@ -1060,9 +1120,9 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
     </div>
 
     <aside class="quote-result">
-      <div class="quote-result-label">Estimativa inicial</div>
+      <div class="quote-result-label">Orçamento instantâneo</div>
       <div class="quote-price" id="quotePrice">—</div>
-      <p id="quoteResultText">Selecione um ou mais itens para gerar uma estimativa. O valor final é confirmado pelo WhatsApp após avaliação.</p>
+      <p id="quoteResultText">Selecione um ou mais itens para gerar o valor do serviço. Se tiver dúvida, você também pode enviar uma foto para confirmação.</p>
       <div class="quote-warning" id="quoteWarning"></div>
 
       <!-- PARCELAMENTO -->
@@ -1076,7 +1136,19 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
         <li>Serviço: limpeza profissional de estofados</li>
         <li>Região: Balneário Camboriú e região sem deslocamento</li>
       </ul>
+      <div class="quote-lead-card" id="quoteLeadCard" style="display:none;">
+        <h4>Quer receber este orçamento?</h4>
+        <p>Informe seu nome e WhatsApp para mantermos o atendimento humano e rápido.</p>
+        <div class="quote-lead-grid">
+          <input class="quote-mini-field" id="leadName" type="text" placeholder="Seu nome">
+          <input class="quote-mini-field" id="leadPhone" type="tel" placeholder="Seu WhatsApp com DDD">
+        </div>
+        <p class="quote-human-note">Orçamento rápido quando possível. Atendimento humano quando necessário.</p>
+      </div>
       <a class="btn btn-accent" id="quoteWhatsapp" href="https://wa.me/5547997545892?text=*Olá!* Quero fazer um orçamento de limpeza de estofado." target="_blank" style="width:100%;">Confirmar pelo WhatsApp →</a>
+      <div class="quote-secondary-actions" id="quoteSecondaryActions" style="display:none;">
+        <a class="btn btn-soft" id="quotePhotoWhatsapp" href="https://wa.me/5547997545892?text=*Olá!* Vou enviar uma foto para avaliação." target="_blank">📷 Enviar foto para confirmação</a>
+      </div>
     </aside>
   </div>
 </section>
@@ -1287,7 +1359,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // ── ORÇAMENTO DIRETO ──
 // Preços vindos do Google Sheets via Apps Script. Se der erro, usa a tabela local abaixo.
-const PRICING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyM8vdSwMdO2NqY5v9q-t9-nTGS9GjiKU_JIAJFCxTRWyupnscNlCT9Ad-bWj2mwy2JDw/exec';
+const PRICING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzFv5qWClAZ1UdYKhbK_YE4gCN2eV3bm0-p89fM3uAbQsNNdbGrmRbCprMtzSgG1nPfVg/exec';
 let PRICE_TABLE = {
   sofa: {
     label: 'Sofá',
@@ -1351,7 +1423,7 @@ let CONDITION_RULES = {
 };
 let COMBO_RULES = { min_items: 2, discount: 30, label: 'Desconto combo' };
 const FREE_REGION_TERMS = ['balneario camboriu', 'balneário camboriú', 'bc', 'camboriu', 'camboriú', 'itajai', 'itajaí', 'itapema', 'navegantes', 'porto belo', 'picarras', 'piçarras'];
-let quoteState = { step: 0, items: [], details: {}, condition: '', city: '', notes: '', price: null };
+let quoteState = { step: 0, items: [], details: {}, condition: '', city: '', notes: '', price: null, needsManual: false, lines: [] };
 
 function normalizeText(text) {
   return (text || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
@@ -1571,6 +1643,80 @@ function quoteFinish() {
   calculateQuote();
   scrollQuoteIntoView();
 }
+function getLeadData() {
+  return {
+    nome: (document.getElementById('leadName')?.value || '').trim(),
+    whatsapp: (document.getElementById('leadPhone')?.value || '').trim()
+  };
+}
+function buildWhatsappMessage(mode = 'confirm') {
+  const condition = CONDITION_RULES[quoteState.condition] || { label: 'não informado' };
+  const lines = quoteState.lines || [];
+  const lead = getLeadData();
+  const whatsappLines = lines.map(line =>
+    `• ${line.label}: ${line.sizeLabel}${line.modelLabel ? ' | ' + line.modelLabel : ''}${line.description ? ' | ' + line.description : ''}${!quoteState.needsManual ? ' | ' + formatBRL(line.total) : ''}`
+  ).join('%0A');
+  const priceLine = quoteState.needsManual ? 'Valor informado no site: sob avaliação' : `Valor informado no site: ${formatBRL(quoteState.price || 0)}`;
+  const comboLine = quoteState.comboApplies ? `%0A${COMBO_RULES.label}: -${formatBRL(COMBO_RULES.discount)}` : '';
+  const intro = mode === 'photo'
+    ? '*Olá! Preenchi o orçamento da Bez Clean e vou enviar uma foto para confirmação.*'
+    : '*Olá! Quero confirmar este orçamento da Bez Clean.*';
+  const finalAsk = mode === 'photo'
+    ? 'Vou enviar uma foto do estofado para vocês confirmarem o modelo e o valor.'
+    : 'Podem confirmar os próximos horários disponíveis?';
+
+  return `${intro}%0A%0A` +
+    `${lead.nome ? `Nome: ${encodeURIComponent(lead.nome)}%0A` : ''}` +
+    `${lead.whatsapp ? `WhatsApp: ${encodeURIComponent(lead.whatsapp)}%0A` : ''}` +
+    `Itens:%0A${whatsappLines || '• não informado'}%0A%0A` +
+    `Condição geral: ${condition.label}%0A` +
+    `Cidade/bairro: ${quoteState.city || 'não informado'}%0A` +
+    `${priceLine}${comboLine}%0A` +
+    `${quoteState.notes ? `Observações: ${encodeURIComponent(quoteState.notes)}%0A` : ''}` +
+    `%0A${encodeURIComponent(finalAsk)}`;
+}
+function updateWhatsappLinks() {
+  const confirmBtn = document.getElementById('quoteWhatsapp');
+  const photoBtn = document.getElementById('quotePhotoWhatsapp');
+  if (confirmBtn) confirmBtn.href = `https://wa.me/5547997545892?text=${buildWhatsappMessage('confirm')}`;
+  if (photoBtn) photoBtn.href = `https://wa.me/5547997545892?text=${buildWhatsappMessage('photo')}`;
+}
+async function saveLead(action = 'confirmar') {
+  if (!quoteState.price && !quoteState.needsManual) return;
+  const lead = getLeadData();
+  const payload = {
+    origem: 'site_orcamento',
+    acao: action,
+    data: new Date().toISOString(),
+    nome: lead.nome,
+    whatsapp: lead.whatsapp,
+    cidade: quoteState.city || '',
+    condicao: (CONDITION_RULES[quoteState.condition] || {}).label || '',
+    valor: quoteState.needsManual ? 'sob avaliação' : quoteState.price,
+    itens: (quoteState.lines || []).map(line => `${line.label}: ${line.sizeLabel}${line.modelLabel ? ' | ' + line.modelLabel : ''}${line.description ? ' | ' + line.description : ''}`).join(' || '),
+    observacoes: quoteState.notes || ''
+  };
+  try {
+    await fetch(PRICING_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+      keepalive: true
+    });
+  } catch (error) {
+    console.warn('Não foi possível salvar o lead automaticamente.', error);
+  }
+}
+function setupLeadButtons() {
+  const confirmBtn = document.getElementById('quoteWhatsapp');
+  const photoBtn = document.getElementById('quotePhotoWhatsapp');
+  const nameInput = document.getElementById('leadName');
+  const phoneInput = document.getElementById('leadPhone');
+  [nameInput, phoneInput].forEach(input => input && input.addEventListener('input', updateWhatsappLinks));
+  if (confirmBtn) confirmBtn.addEventListener('click', () => { updateWhatsappLinks(); saveLead('confirmar_whatsapp'); });
+  if (photoBtn) photoBtn.addEventListener('click', () => { updateWhatsappLinks(); saveLead('enviar_foto'); });
+}
 function calculateQuote() {
   if (!quoteState.items.length || !quoteState.condition) return;
   const condition = CONDITION_RULES[quoteState.condition];
@@ -1595,13 +1741,15 @@ function calculateQuote() {
 
   const comboApplies = !needsManual && quoteState.items.length >= COMBO_RULES.min_items && COMBO_RULES.discount > 0;
   const finalPrice = Math.max(0, subtotal - (comboApplies ? COMBO_RULES.discount : 0));
-  const rangeMax = Math.round((finalPrice * 1.12) / 10) * 10;
   quoteState.price = finalPrice;
+  quoteState.needsManual = needsManual;
+  quoteState.lines = lines;
+  quoteState.comboApplies = comboApplies;
 
-  document.getElementById('quotePrice').textContent = needsManual ? 'Sob avaliação' : `${formatBRL(finalPrice)} – ${formatBRL(rangeMax)}`;
+  document.getElementById('quotePrice').textContent = needsManual ? 'Sob avaliação' : formatBRL(finalPrice);
   document.getElementById('quoteResultText').textContent = needsManual
-    ? 'Algum item precisa de avaliação rápida. Envie pelo WhatsApp para a equipe confirmar o melhor orçamento.'
-    : 'Esta é uma estimativa automática em faixa. A equipe confirma o valor final pelo WhatsApp conforme fotos, tecido e estado real do estofado.';
+    ? 'Este item precisa de confirmação humana. Envie as informações e uma foto pelo WhatsApp para avaliarmos rapidamente.'
+    : 'Valor calculado conforme as informações preenchidas. Se tiver dúvida sobre modelo ou tamanho, envie uma foto para confirmação.';
 
   // ── PARCELAMENTO ──
   const installmentsEl = document.getElementById('quoteInstallments');
@@ -1616,7 +1764,7 @@ function calculateQuote() {
     installmentsOptsEl.innerHTML = plans.map(plan => {
       const grossValue = finalPrice / (1 - MACHINE_RATE);
       const parcelValue = grossValue / plan.parcelas;
-      const formattedParcel = formatBRL(Math.ceil(parcelValue / 5) * 5); // arredonda pra R$5 acima
+      const formattedParcel = formatBRL(Math.ceil(parcelValue / 5) * 5);
       if (plan.parcelas === 1) {
         return `<div class="qi-option qi-best"><span class="qi-badge">Melhor opção</span><span class="qi-parcela">À vista</span><span class="qi-valor">${formatBRL(finalPrice)}</span></div>`;
       }
@@ -1646,19 +1794,11 @@ function calculateQuote() {
     <li>Local: ${quoteState.city || 'não informado'}</li>
   `;
 
-  const whatsappLines = lines.map(line =>
-    `• ${line.label}: ${line.sizeLabel}${line.modelLabel ? ' | ' + line.modelLabel : ''}${line.description ? ' | ' + line.description : ''}${!needsManual ? ' | ' + formatBRL(line.total) : ''}`
-  ).join('%0A');
-  const priceLine = needsManual ? 'Estimativa exibida no site: sob avaliação' : `Estimativa exibida no site: ${formatBRL(finalPrice)} a ${formatBRL(rangeMax)}`;
-  const comboLine = comboApplies ? `%0A${COMBO_RULES.label}: -${formatBRL(COMBO_RULES.discount)}` : '';
-  const message = `*Olá! Quero confirmar um orçamento da Bez Clean.*%0A%0A` +
-    `Itens:%0A${whatsappLines}%0A%0A` +
-    `Condição geral: ${condition.label}%0A` +
-    `Cidade/bairro: ${quoteState.city || 'não informado'}%0A` +
-    `${priceLine}${comboLine}%0A` +
-    `${quoteState.notes ? `Observações: ${quoteState.notes}%0A` : ''}` +
-    `%0APodem confirmar o valor final?`;
-  document.getElementById('quoteWhatsapp').href = `https://wa.me/5547997545892?text=${message}`;
+  const leadCard = document.getElementById('quoteLeadCard');
+  const secondaryActions = document.getElementById('quoteSecondaryActions');
+  if (leadCard) leadCard.style.display = 'block';
+  if (secondaryActions) secondaryActions.style.display = 'grid';
+  updateWhatsappLinks();
 }
 
 document.querySelectorAll('[data-quote-app] .quote-options').forEach(group => {
@@ -1666,6 +1806,7 @@ document.querySelectorAll('[data-quote-app] .quote-options').forEach(group => {
     btn.addEventListener('click', () => selectQuoteOption(group.dataset.field, btn.dataset.value, btn));
   });
 });
+setupLeadButtons();
 loadRemotePrices();
 function stopAutoplay() {}
 
