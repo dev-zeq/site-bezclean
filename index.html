@@ -776,6 +776,14 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
   .quote-options { grid-template-columns: 1fr 1fr; }
 }
 
+
+/* Ajuste mobile: mantém o orçamento centralizado ao avançar etapas */
+.quote-section, .quote-card { scroll-margin-top: 96px; }
+@media (max-width: 768px) {
+  .quote-section { padding-top: 58px; }
+  .quote-card { scroll-margin-top: 88px; }
+}
+
 </style>
 </head>
 <body>
@@ -1429,6 +1437,18 @@ function handleDetailChange(event) {
   quoteState.details[itemKey][field] = event.target.value;
   if (itemKey === 'sofa' && field === 'model') renderDetails();
 }
+function scrollQuoteIntoView(force = false) {
+  const card = document.querySelector('[data-quote-app]');
+  if (!card) return;
+  const shouldScroll = force || window.innerWidth <= 768;
+  if (!shouldScroll) return;
+  const navOffset = 92;
+  const targetY = card.getBoundingClientRect().top + window.scrollY - navOffset;
+  window.requestAnimationFrame(() => {
+    window.scrollTo({ top: Math.max(targetY, 0), behavior: 'smooth' });
+  });
+}
+
 function updateQuoteProgress() {
   const bar = document.getElementById('quoteProgress');
   if (bar) bar.style.width = `${((quoteState.step + 1) / 5) * 100}%`;
@@ -1451,6 +1471,7 @@ function quoteNext() {
     const warning = document.getElementById('quoteWarning');
     warning.textContent = 'Selecione pelo menos um estofado para continuar.';
     warning.classList.add('active');
+    scrollQuoteIntoView(true);
     return;
   }
   document.getElementById('quoteWarning').classList.remove('active');
@@ -1458,15 +1479,18 @@ function quoteNext() {
   if (quoteState.step === 3) quoteState.city = document.getElementById('quoteCity').value;
   if (quoteState.step < 4) quoteState.step += 1;
   updateQuoteProgress();
+  scrollQuoteIntoView();
 }
 function quotePrev() {
   if (quoteState.step > 0) quoteState.step -= 1;
   updateQuoteProgress();
+  scrollQuoteIntoView();
 }
 function quoteFinish() {
   quoteState.city = document.getElementById('quoteCity').value;
   quoteState.notes = document.getElementById('quoteNotes').value;
   calculateQuote();
+  scrollQuoteIntoView();
 }
 function calculateQuote() {
   if (!quoteState.items.length || !quoteState.condition) return;
