@@ -61,6 +61,10 @@ h1, h2, h3, h4 {
 .delay-1 { transition-delay: 0.1s; }
 .delay-2 { transition-delay: 0.2s; }
 
+/* Fallback Android/WebView: evita tela branca se animações/scripts falharem */
+.reveal.force-visible { opacity: 1 !important; transform: none !important; }
+html.android-safe .reveal { opacity: 1 !important; transform: none !important; }
+
 /* ── NAVIGATION ── */
 .nav-wrapper {
   position: fixed;
@@ -903,6 +907,25 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
   opacity: 0.82;
   margin: 10px 0 0 !important;
 }
+
+.quote-lead-status {
+  display: none;
+  margin: 12px 0 0;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: rgba(163, 230, 53, 0.08);
+  border: 1px solid rgba(163, 230, 53, 0.22);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+.quote-lead-status.active { display: block; }
+.quote-lead-status.error {
+  background: rgba(249, 115, 22, 0.08);
+  border-color: rgba(249, 115, 22, 0.22);
+  color: #fed7aa;
+}
 @media (min-width: 769px) {
   .quote-secondary-actions { grid-template-columns: 1fr; }
 }
@@ -1048,8 +1071,8 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
     <div class="quote-intro">
       <span class="section-eyebrow">Orçamento Direto</span>
       <h2>Monte seu orçamento com um ou mais estofados.</h2>
-      <p>Escolha todos os itens que deseja higienizar, informe os detalhes e receba uma estimativa inicial para enviar ao WhatsApp.</p>
-      <div class="quote-note">✓ Ideal para combos como sofá + colchão · Valor estimado em menos de 1 minuto · Atendimento a domicílio</div>
+      <p>Escolha os itens que deseja higienizar, informe os detalhes e receba o valor do serviço com confirmação pelo WhatsApp.</p>
+      <div class="quote-note">✓ Ideal para combos como sofá + colchão · Valor em menos de 1 minuto · Atendimento a domicílio</div>
     </div>
 
     <div class="quote-card" data-quote-app>
@@ -1105,12 +1128,18 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
 
       <div class="quote-step" data-step="4">
         <small>Passo 5 de 5</small>
-        <h3>Alguma observação? <span style="font-size:0.75rem;font-weight:400;opacity:0.5">(opcional)</span></h3>
-        <p class="quote-fineprint" style="margin-top:-6px;margin-bottom:12px;">Se não tiver, pode clicar direto em "Ver estimativa".</p>
-        <textarea class="quote-field" id="quoteNotes" rows="3" placeholder="Ex.: tem pet, mancha de urina, mofo, muito tempo sem limpar..."></textarea>
+        <h3>Para finalizar, informe seus dados</h3>
+        <p class="quote-fineprint" style="margin-top:-6px;margin-bottom:12px;">Enviaremos a confirmação do orçamento pelo WhatsApp e pediremos uma foto do estofado para avaliação.</p>
+        <div class="quote-lead-grid" style="margin-bottom:10px;">
+          <input class="quote-field" id="leadName" type="text" placeholder="Seu nome">
+          <input class="quote-field" id="leadPhone" type="tel" placeholder="Seu WhatsApp com DDD">
+        </div>
+        <textarea class="quote-field" id="quoteNotes" rows="3" placeholder="Observação opcional: pet, mancha, mofo, muito tempo sem limpar..."></textarea>
+        <p class="quote-human-note">Orçamento rápido quando possível. Atendimento humano quando necessário.</p>
+        <div class="quote-lead-status" id="quoteLeadStatus"></div>
         <div class="quote-actions">
           <button class="btn btn-outline" type="button" onclick="quotePrev()">Voltar</button>
-          <button class="btn btn-accent" type="button" onclick="quoteFinish()">Ver estimativa</button>
+          <button class="btn btn-accent" type="button" onclick="quoteFinish()">Finalizar e receber no WhatsApp</button>
         </div>
       </div>
 
@@ -1120,16 +1149,16 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
     </div>
 
     <aside class="quote-result">
-      <div class="quote-result-label">Orçamento instantâneo</div>
+      <div class="quote-result-label">Valor</div>
       <div class="quote-price" id="quotePrice">—</div>
-      <p id="quoteResultText">Selecione um ou mais itens para gerar o valor do serviço. Se tiver dúvida, você também pode enviar uma foto para confirmação.</p>
+      <p id="quoteResultText">Selecione os itens para calcular o valor do serviço. A confirmação será enviada pelo WhatsApp.</p>
       <div class="quote-warning" id="quoteWarning"></div>
 
       <!-- PARCELAMENTO -->
       <div class="quote-installments" id="quoteInstallments" style="display:none">
         <div class="qi-title">💳 Opções de pagamento</div>
         <div class="qi-options" id="quoteInstallmentOptions"></div>
-        <div class="qi-note">Parcelamento sujeito a confirmação. Valor final definido pelo WhatsApp.</div>
+        <div class="qi-note">Opções calculadas conforme o valor do orçamento. Confirmação pelo WhatsApp.</div>
       </div>
 
       <ul class="quote-summary" id="quoteSummary">
@@ -1137,18 +1166,12 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
         <li>Região: Balneário Camboriú e região sem deslocamento</li>
       </ul>
       <div class="quote-lead-card" id="quoteLeadCard" style="display:none;">
-        <h4>Quer receber este orçamento?</h4>
-        <p>Informe seu nome e WhatsApp para mantermos o atendimento humano e rápido.</p>
-        <div class="quote-lead-grid">
-          <input class="quote-mini-field" id="leadName" type="text" placeholder="Seu nome">
-          <input class="quote-mini-field" id="leadPhone" type="tel" placeholder="Seu WhatsApp com DDD">
-        </div>
-        <p class="quote-human-note">Orçamento rápido quando possível. Atendimento humano quando necessário.</p>
+        <h4>Confirmação pelo WhatsApp</h4>
+        <p>Ao finalizar, você recebe uma mensagem automática da Bez Clean com o orçamento e o pedido de foto para avaliação.</p>
+        <p class="quote-human-note">Se precisar, nossa equipe assume o atendimento humano em seguida.</p>
       </div>
-      <a class="btn btn-accent" id="quoteWhatsapp" href="https://wa.me/5547997545892?text=*Olá!* Quero fazer um orçamento de limpeza de estofado." target="_blank" style="width:100%;">Confirmar pelo WhatsApp →</a>
-      <div class="quote-secondary-actions" id="quoteSecondaryActions" style="display:none;">
-        <a class="btn btn-soft" id="quotePhotoWhatsapp" href="https://wa.me/5547997545892?text=*Olá!* Vou enviar uma foto para avaliação." target="_blank">📷 Enviar foto para confirmação</a>
-      </div>
+      <button class="btn btn-accent" id="quoteWhatsapp" type="button" style="width:100%;display:none;">Receber confirmação novamente →</button>
+      <div class="quote-secondary-actions" id="quoteSecondaryActions" style="display:none;"></div>
     </aside>
   </div>
 </section>
@@ -1216,9 +1239,26 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
   <div class="footer-bottom"><p>© 2026 Bez Clean. Todos os direitos reservados.</p><p>Design <a href="https://instagram.com/zeqmiranda21" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:600;">zeqmiranda</a></p></div>
 </footer>
 
+
+<script>
+// Proteção extra para Android/WebView: se alguma animação ou script falhar, o conteúdo continua visível.
+(function () {
+  function revealFallback() {
+    try {
+      document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('force-visible', 'in-view'); });
+    } catch (e) {}
+  }
+  window.bezRevealFallback = revealFallback;
+  window.addEventListener('error', revealFallback);
+  window.addEventListener('unhandledrejection', revealFallback);
+  setTimeout(revealFallback, 1800);
+})();
+</script>
+
 <script>
 // ── NEVE ANIMADA ──
 const snow = document.getElementById('snow');
+if (snow) {
 for (let i = 0; i < 30; i++) {
   const flake = document.createElement('div');
   flake.className = 'snowflake';
@@ -1233,14 +1273,20 @@ for (let i = 0; i < 30; i++) {
   `;
   snow.appendChild(flake);
 }
+}
 </script>
 
 <script>
 // ── REVEAL ON SCROLL ──
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('in-view'); });
-}, { threshold: 0.05 });
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+const revealItems = document.querySelectorAll('.reveal');
+if ('IntersectionObserver' in window) {
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('in-view'); });
+  }, { threshold: 0.05 });
+  revealItems.forEach(el => revealObserver.observe(el));
+} else {
+  revealItems.forEach(el => el.classList.add('in-view', 'force-visible'));
+}
 
 // ── FAQ ──
 document.querySelectorAll('.faq-trigger').forEach(trigger => {
@@ -1360,6 +1406,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // ── ORÇAMENTO DIRETO ──
 // Preços vindos do Google Sheets via Apps Script. Se der erro, usa a tabela local abaixo.
 const PRICING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzFv5qWClAZ1UdYKhbK_YE4gCN2eV3bm0-p89fM3uAbQsNNdbGrmRbCprMtzSgG1nPfVg/exec';
+const LEADS_WEBHOOK_ENDPOINT = 'https://flow-bez.app.n8n.cloud/webhook/24bce108-ac23-4ea4-a62c-441d4c31c834'; // n8n: salvar lead + enviar WhatsApp automático
 let PRICE_TABLE = {
   sofa: {
     label: 'Sofá',
@@ -1406,7 +1453,7 @@ let PRICE_TABLE = {
   outro: {
     label: 'Outro estofado',
     sizes: {
-      'avaliar': { label: 'Avaliar pelo WhatsApp', price: 0 }
+      'avaliar': { label: 'Avaliar com foto', price: 0 }
     }
   }
 };
@@ -1637,10 +1684,11 @@ function quotePrev() {
   updateQuoteProgress();
   scrollQuoteIntoView();
 }
-function quoteFinish() {
+async function quoteFinish() {
   quoteState.city = document.getElementById('quoteCity').value;
   quoteState.notes = document.getElementById('quoteNotes').value;
   calculateQuote();
+  await saveLead('confirmar_whatsapp');
   scrollQuoteIntoView();
 }
 function getLeadData() {
@@ -1676,36 +1724,91 @@ function buildWhatsappMessage(mode = 'confirm') {
     `%0A${encodeURIComponent(finalAsk)}`;
 }
 function updateWhatsappLinks() {
-  const confirmBtn = document.getElementById('quoteWhatsapp');
-  const photoBtn = document.getElementById('quotePhotoWhatsapp');
-  if (confirmBtn) confirmBtn.href = `https://wa.me/5547997545892?text=${buildWhatsappMessage('confirm')}`;
-  if (photoBtn) photoBtn.href = `https://wa.me/5547997545892?text=${buildWhatsappMessage('photo')}`;
+  // Agora o WhatsApp é enviado automaticamente pelo n8n/Evolution.
+  // Mantemos esta função para compatibilidade com outras partes do orçamento.
 }
-async function saveLead(action = 'confirmar') {
-  if (!quoteState.price && !quoteState.needsManual) return;
+function showLeadStatus(message, type = 'success') {
+  const status = document.getElementById('quoteLeadStatus');
+  if (!status) return;
+  status.textContent = message;
+  status.classList.add('active');
+  status.classList.toggle('error', type === 'error');
+}
+function clearLeadStatus() {
+  const status = document.getElementById('quoteLeadStatus');
+  if (!status) return;
+  status.textContent = '';
+  status.classList.remove('active', 'error');
+}
+function normalizePhoneForLead(value) {
+  return (value || '').toString().replace(/\D/g, '');
+}
+function buildLeadPayload(action = 'confirmar') {
   const lead = getLeadData();
-  const payload = {
-    origem: 'site_orcamento',
+  return {
+    origem: action === 'enviar_foto' ? 'site_foto' : 'site_orcamento',
     acao: action,
     data: new Date().toISOString(),
     nome: lead.nome,
-    whatsapp: lead.whatsapp,
+    whatsapp: normalizePhoneForLead(lead.whatsapp),
     cidade: quoteState.city || '',
     condicao: (CONDITION_RULES[quoteState.condition] || {}).label || '',
     valor: quoteState.needsManual ? 'sob avaliação' : quoteState.price,
     itens: (quoteState.lines || []).map(line => `${line.label}: ${line.sizeLabel}${line.modelLabel ? ' | ' + line.modelLabel : ''}${line.description ? ' | ' + line.description : ''}`).join(' || '),
-    observacoes: quoteState.notes || ''
+    observacoes: quoteState.notes || '',
+    status: 'Novo'
   };
+}
+function validateLeadFields() {
+  const lead = getLeadData();
+  const phone = normalizePhoneForLead(lead.whatsapp);
+  if (!lead.nome) {
+    showLeadStatus('Informe seu nome para receber a confirmação pelo WhatsApp.', 'error');
+    document.getElementById('leadName')?.focus();
+    return false;
+  }
+  if (phone.length < 10) {
+    showLeadStatus('Informe um WhatsApp válido com DDD.', 'error');
+    document.getElementById('leadPhone')?.focus();
+    return false;
+  }
+  return true;
+}
+async function saveLead(action = 'confirmar') {
+  if (!quoteState.price && !quoteState.needsManual) return false;
+  if (!validateLeadFields()) return false;
+
+  const payload = buildLeadPayload(action);
+  const confirmBtn = document.getElementById('quoteWhatsapp');
+  const photoBtn = document.getElementById('quotePhotoWhatsapp');
+  const clickedBtn = action === 'enviar_foto' ? photoBtn : confirmBtn;
+  const originalText = clickedBtn ? clickedBtn.textContent : '';
+
+  clearLeadStatus();
+  [confirmBtn, photoBtn].forEach(btn => { if (btn) btn.disabled = true; });
+  if (clickedBtn) clickedBtn.textContent = 'Enviando...';
+
   try {
-    await fetch(PRICING_ENDPOINT, {
+    const response = await fetch(LEADS_WEBHOOK_ENDPOINT, {
       method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload),
-      keepalive: true
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
+
+    if (!response.ok) throw new Error('Webhook retornou erro: ' + response.status);
+
+    const msg = action === 'enviar_foto'
+      ? '✅ Pronto! Enviamos uma mensagem para seu WhatsApp. Responda por lá com uma foto do estofado para confirmarmos certinho.'
+      : '✅ Pronto! Enviamos a confirmação deste orçamento para seu WhatsApp. Responda por lá com uma foto do estofado para confirmarmos certinho.';
+    showLeadStatus(msg, 'success');
+    return true;
   } catch (error) {
-    console.warn('Não foi possível salvar o lead automaticamente.', error);
+    console.warn('Não foi possível enviar o lead para o n8n.', error);
+    showLeadStatus('Não conseguimos enviar automaticamente agora. Verifique seu WhatsApp e tente novamente em alguns segundos.', 'error');
+    return false;
+  } finally {
+    [confirmBtn, photoBtn].forEach(btn => { if (btn) btn.disabled = false; });
+    if (clickedBtn) clickedBtn.textContent = originalText;
   }
 }
 function setupLeadButtons() {
@@ -1713,9 +1816,9 @@ function setupLeadButtons() {
   const photoBtn = document.getElementById('quotePhotoWhatsapp');
   const nameInput = document.getElementById('leadName');
   const phoneInput = document.getElementById('leadPhone');
-  [nameInput, phoneInput].forEach(input => input && input.addEventListener('input', updateWhatsappLinks));
-  if (confirmBtn) confirmBtn.addEventListener('click', () => { updateWhatsappLinks(); saveLead('confirmar_whatsapp'); });
-  if (photoBtn) photoBtn.addEventListener('click', () => { updateWhatsappLinks(); saveLead('enviar_foto'); });
+  [nameInput, phoneInput].forEach(input => input && input.addEventListener('input', clearLeadStatus));
+  if (confirmBtn) confirmBtn.addEventListener('click', () => saveLead('confirmar_whatsapp'));
+  if (photoBtn) photoBtn.addEventListener('click', () => saveLead('enviar_foto'));
 }
 function calculateQuote() {
   if (!quoteState.items.length || !quoteState.condition) return;
@@ -1748,7 +1851,7 @@ function calculateQuote() {
 
   document.getElementById('quotePrice').textContent = needsManual ? 'Sob avaliação' : formatBRL(finalPrice);
   document.getElementById('quoteResultText').textContent = needsManual
-    ? 'Este item precisa de confirmação humana. Envie as informações e uma foto pelo WhatsApp para avaliarmos rapidamente.'
+    ? 'Este item precisa de confirmação humana. Enviaremos uma mensagem para você responder com uma foto e avaliarmos rapidamente.'
     : 'Valor calculado conforme as informações preenchidas. Se tiver dúvida sobre modelo ou tamanho, envie uma foto para confirmação.';
 
   // ── PARCELAMENTO ──
@@ -1796,8 +1899,10 @@ function calculateQuote() {
 
   const leadCard = document.getElementById('quoteLeadCard');
   const secondaryActions = document.getElementById('quoteSecondaryActions');
+  const confirmBtn = document.getElementById('quoteWhatsapp');
   if (leadCard) leadCard.style.display = 'block';
-  if (secondaryActions) secondaryActions.style.display = 'grid';
+  if (confirmBtn) confirmBtn.style.display = 'inline-flex';
+  if (secondaryActions) secondaryActions.style.display = 'none';
   updateWhatsappLinks();
 }
 
