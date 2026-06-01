@@ -701,6 +701,54 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
   line-height: 1.45;
 }
 .sofa-helper strong { color: var(--ice); }
+.sofa-size-ref {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+.ssr-item {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px 6px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.ssr-size {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+.ssr-measure {
+  font-size: 0.66rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+.sofa-photo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #25D366;
+  text-decoration: none;
+  border: 1px solid rgba(37,211,102,0.25);
+  background: rgba(37,211,102,0.06);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  transition: all 0.2s;
+  width: 100%;
+  justify-content: center;
+}
+.sofa-photo-link:hover {
+  background: rgba(37,211,102,0.12);
+  border-color: rgba(37,211,102,0.4);
+}
 .sofa-mini-diagram {
   display: flex;
   flex-wrap: wrap;
@@ -1411,10 +1459,10 @@ let PRICE_TABLE = {
   sofa: {
     label: 'Sofá',
     sizes: {
-      '2_lugares': { label: '2 lugares / 2 módulos', price: 180 },
-      '3_lugares': { label: '3 lugares / 3 módulos', price: 220 },
-      '4_lugares': { label: '4 lugares / 4 módulos', price: 280 },
-      '5_mais': { label: '5 lugares ou 5+ módulos', price: 340 }
+      '2_lugares': { label: '2 lugares (até ~1,60m)', price: 180 },
+      '3_lugares': { label: '3 lugares (até ~2,10m)', price: 220 },
+      '4_lugares': { label: '4 lugares (até ~2,60m)', price: 280 },
+      '5_mais':    { label: '5+ lugares / sofá grande (acima de 2,60m)', price: 340 }
     }
   },
   colchao: {
@@ -1552,6 +1600,7 @@ function getSofaSizeLabel(sizeKey, modelKey, fallbackLabel) {
   const amount = digits ? digits[0] : '5+';
   if (modelKey === 'retratil') return `${amount} partes retráteis`;
   if (modelKey === 'retratil_chaise') return `${amount} partes retráteis + chaise`;
+  // Para sofá comum preserva o label com medida de referência
   return fallbackLabel || `${amount} lugares`;
 }
 function getSofaHelper(modelKey) {
@@ -1571,8 +1620,16 @@ function getSofaHelper(modelKey) {
   }
   return `
     <div class="sofa-helper">
-      <strong>Como escolher:</strong> para sofá comum, use a forma que você falaria no dia a dia: 2 lugares, 3 lugares, 4 lugares ou maior.
-      <div class="sofa-mini-diagram"><span class="sofa-module">1</span><span class="sofa-module">2</span><span class="sofa-module">3</span></div>
+      <strong>Não tem certeza do tamanho?</strong> Meça o comprimento total do sofá e use a referência abaixo. Não precisa ser exato — uma estimativa já resolve.
+      <div class="sofa-size-ref">
+        <div class="ssr-item"><span class="ssr-size">2 lug.</span><span class="ssr-measure">até ~1,60m</span></div>
+        <div class="ssr-item"><span class="ssr-size">3 lug.</span><span class="ssr-measure">até ~2,10m</span></div>
+        <div class="ssr-item"><span class="ssr-size">4 lug.</span><span class="ssr-measure">até ~2,60m</span></div>
+        <div class="ssr-item"><span class="ssr-size">5+ lug.</span><span class="ssr-measure">acima de 2,60m</span></div>
+      </div>
+      <a class="sofa-photo-link" href="https://wa.me/5547997545892?text=Olá!%20Não%20sei%20o%20tamanho%20exato%20do%20meu%20sofá.%20Vou%20enviar%20uma%20foto%20para%20vocês%20me%20ajudarem%20com%20o%20orçamento!" target="_blank">
+        📸 Ainda não sei — enviar foto pelo WhatsApp
+      </a>
     </div>`;
 }
 
