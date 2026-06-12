@@ -226,7 +226,8 @@ tailwind.config = {
   @keyframes stepIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
   .quote-step small { display: block; color: #38E1D4; font-weight: 700; font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 8px; }
   .quote-step h3 { font-weight: 700; font-size: 1.3rem; margin-bottom: 16px; }
-  .quote-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .quote-options { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  @media (min-width: 480px) { .quote-options { grid-template-columns: 1fr 1fr; } }
   .quote-option { font-family: 'Figtree', sans-serif; text-align: left; background: rgba(255,255,255,.04); border: 1.5px solid rgba(255,255,255,.12); border-radius: 16px; padding: 14px; cursor: pointer; color: #F3F7F9; transition: border-color .2s, background .2s, transform .2s cubic-bezier(.22,1,.36,1); }
   .quote-option:hover { border-color: rgba(56,225,212,.6); transform: translateY(-2px); }
   .quote-option strong { display: block; font-size: .95rem; margin-bottom: 3px; }
@@ -306,6 +307,10 @@ tailwind.config = {
   .quote-lead-status.error { background: rgba(255,154,139,.08); border-color: rgba(255,154,139,.35); color: #FF9A8B; }
   .quote-secondary-actions { margin-top: 10px; }
 
+  /* ── esconde scrollbar no trilho de vídeos (webkit + firefox) ── */
+  .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+
   /* ── reduz movimento ── */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -321,7 +326,7 @@ tailwind.config = {
 <header class="fixed top-0 inset-x-0 z-40 px-4 pt-3">
   <div class="glass max-w-6xl mx-auto rounded-full flex items-center justify-between pl-5 pr-2 py-2 shadow-glass">
     <a href="#" class="flex items-center gap-2">
-      <img src="imagens/LOGO.png" alt="Bez Clean" class="h-8 w-auto">
+      <img src="imagens/LOGO.png" alt="Bez Clean" class="h-10 w-auto">
     </a>
     <div class="flex items-center gap-2">
       <a href="#orcamento"
@@ -340,7 +345,7 @@ tailwind.config = {
 <!-- ── MENU FULLSCREEN ── -->
 <div id="menuOverlay" class="fixed inset-0 z-50 bg-ink-2/95 backdrop-blur-2xl flex flex-col items-center justify-center gap-2">
   <button id="menuClose" aria-label="Fechar menu"
-          class="absolute top-5 right-6 w-11 h-11 rounded-full bg-snow/10 border border-white/10 text-snow text-lg">✕</button>
+          class="absolute top-5 right-6 w-11 h-11 rounded-full bg-snow/10 border border-white/10 text-snow text-lg flex items-center justify-center">✕</button>
   <nav class="flex flex-col items-center gap-2 text-center">
     <a href="#orcamento" class="menu-link font-display font-bold text-3xl sm:text-4xl py-2 hover:text-plasma transition-colors">Orçamento Rápido</a>
     <a href="#antes-depois" class="menu-link font-display font-bold text-3xl sm:text-4xl py-2 hover:text-plasma transition-colors">Antes & Depois</a>
@@ -503,7 +508,7 @@ tailwind.config = {
   </div>
 
   <!-- trilho com scroll-snap no mobile, grade no desktop -->
-  <div class="flex sm:grid sm:grid-cols-3 gap-4 overflow-x-auto sm:overflow-visible snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0 pb-4 sm:pb-0" style="scrollbar-width:none;">
+  <div class="no-scrollbar flex sm:grid sm:grid-cols-3 gap-4 overflow-x-auto sm:overflow-visible snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0 pb-4 sm:pb-0">
 
     <figure class="card-3d relative shrink-0 w-[82%] sm:w-auto snap-center rounded-blob overflow-hidden border border-white/10 shadow-lift sr">
       <video class="auto-video w-full aspect-[4/5] object-cover" muted loop playsinline preload="none" data-src="imagens/processo_limpeza_sofa.mp4"><source type="video/mp4"></video>
