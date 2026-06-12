@@ -1100,6 +1100,32 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
   .quote-card { scroll-margin-top: 88px; }
 }
 
+/* ── BOTÃO WHATSAPP FLUTUANTE ── */
+.whatsapp-float {
+  position: fixed; bottom: 24px; right: 24px; z-index: 999;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #25d366; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+  text-decoration: none; font-size: 1.6rem;
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.6); }
+
+/* ── CUPOM ── */
+.coupon-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+.coupon-label { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; }
+.coupon-row { display: flex; gap: 8px; }
+.coupon-row input { flex: 1; background: var(--dark-bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 8px 12px; color: var(--text-main); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; outline: none; transition: border-color .2s; }
+.coupon-row input:focus { border-color: var(--accent); }
+.coupon-row input::placeholder { text-transform: none; letter-spacing: 0; color: var(--text-muted); }
+.coupon-btn { background: var(--dark-surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 8px 14px; color: var(--text-main); font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: border-color .2s, color .2s; }
+.coupon-btn:hover { border-color: var(--accent); color: var(--accent); }
+.coupon-status { margin-top: 6px; font-size: 0.8rem; min-height: 18px; }
+.coupon-status.ok { color: var(--accent); }
+.coupon-status.err { color: #f87171; }
+.coupon-discount-line { color: var(--accent); font-weight: 600; }
+
 </style>
 </head>
 <body>
@@ -1157,7 +1183,7 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
   <div class="trust-row">
     <div class="trust-item"><span>100%</span> satisfação garantida</div>
     <div class="trust-divider"></div>
-    <div class="trust-item"><span>500+</span> clientes atendidos</div>
+    <div class="trust-item"><span>200+</span> clientes atendidos</div>
     <div class="trust-divider"></div>
     <div class="trust-item"><span>0%</span> taxa de deslocamento na região</div>
   </div>
@@ -1326,6 +1352,15 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
         <div class="qi-note">Opções calculadas conforme o valor do orçamento. Confirmação pelo WhatsApp.</div>
       </div>
 
+      <div class="coupon-section" id="couponSection" style="display:none;">
+        <p class="coupon-label">Tem cupom de desconto?</p>
+        <div class="coupon-row">
+          <input type="text" id="couponInput" placeholder="Ex.: PRIMEIRA" maxlength="20">
+          <button class="coupon-btn" onclick="applyCoupon()">Aplicar</button>
+        </div>
+        <div class="coupon-status" id="couponStatus"></div>
+      </div>
+
       <ul class="quote-summary" id="quoteSummary">
         <li>Serviço: limpeza profissional de estofados</li>
         <li>Região: Balneário Camboriú e região sem deslocamento</li>
@@ -1397,7 +1432,7 @@ footer { background: #070a12; padding: 60px 20px 30px; border-top: 1px solid var
 
 <footer>
   <div class="footer-top reveal">
-    <div class="footer-brand"><img src="imagens/LOGO.png" alt="Bez Clean"><p>Elevando o padrão de conforto e saúde do seu lar ou veículo através de higienização profissional de alto nível.</p></div>
+    <div class="footer-brand"><img src="imagens/LOGO.png" alt="Bez Clean"><p>Elevando o padrão de conforto e saúde do seu lar ou veículo através de higienização profissional de alto nível.</p><a href="https://instagram.com/bez_clean" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:14px;color:var(--text-muted);text-decoration:none;font-size:0.85rem;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">📷 @bez_clean</a></div>
     <div class="footer-col"><h4>Serviços</h4><ul><li><a href="#servicos">Sofás e Poltronas</a></li><li><a href="#servicos">Colchões</a></li><li><a href="#servicos">Interior Automotivo</a></li><li><a href="#servicos">Couro e estofados especiais</a></li></ul></div>
     <div class="footer-col"><h4>Contato</h4><ul><li><a href="https://wa.me/5547997545892">(47) 99754-5892</a></li><li><a href="mailto:contato@bezclean.com.br">contato@bezclean.com.br</a></li><li><a href="#orcamento">Atendimento a domicílio</a></li><li>Balneário Camboriú, Itajaí, Camboriú, Itapema, Navegantes</li></ul></div>
   </div>
@@ -1638,7 +1673,10 @@ let CONDITION_RULES = {
 };
 let COMBO_RULES = { min_items: 2, discount: 30, label: 'Desconto combo' };
 const FREE_REGION_TERMS = ['balneario camboriu', 'balneário camboriú', 'bc', 'camboriu', 'camboriú', 'itajai', 'itajaí', 'itapema', 'navegantes', 'porto belo', 'picarras', 'piçarras'];
-let quoteState = { step: 0, items: [], details: {}, condition: '', city: '', notes: '', price: null, needsManual: false, lines: [] };
+const COUPONS = {
+  'PRIMEIRA': { percent: 10, label: '10% — primeira higienização' }
+};
+let quoteState = { step: 0, items: [], details: {}, condition: '', city: '', notes: '', price: null, needsManual: false, lines: [], couponCode: '', couponDiscount: 0 };
 
 function normalizeText(text) {
   return (text || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
@@ -1897,6 +1935,7 @@ function buildWhatsappMessage(mode = 'confirm') {
   ).join('%0A');
   const priceLine = quoteState.needsManual ? 'Valor informado no site: sob avaliação' : `Valor informado no site: ${formatBRL(quoteState.price || 0)}`;
   const comboLine = quoteState.comboApplies ? `%0A${COMBO_RULES.label}: -${formatBRL(COMBO_RULES.discount)}` : '';
+  const couponLine = quoteState.couponDiscount > 0 ? `%0ACupom ${quoteState.couponCode}: -${formatBRL(quoteState.couponDiscount)}` : '';
   const intro = mode === 'photo'
     ? '*Olá! Preenchi o orçamento da Bez Clean e vou enviar uma foto para confirmação.*'
     : '*Olá! Quero confirmar este orçamento da Bez Clean.*';
@@ -1910,7 +1949,7 @@ function buildWhatsappMessage(mode = 'confirm') {
     `Itens:%0A${whatsappLines || '• não informado'}%0A%0A` +
     `Condição geral: ${condition.label}%0A` +
     `Cidade/bairro: ${quoteState.city || 'não informado'}%0A` +
-    `${priceLine}${comboLine}%0A` +
+    `${priceLine}${comboLine}${couponLine}%0A` +
     `${quoteState.notes ? `Observações: ${encodeURIComponent(quoteState.notes)}%0A` : ''}` +
     `%0A${encodeURIComponent(finalAsk)}`;
 }
@@ -1947,6 +1986,8 @@ function buildLeadPayload(action = 'confirmar') {
     valor: quoteState.needsManual ? 'sob avaliação' : quoteState.price,
     itens: (quoteState.lines || []).map(line => `${line.label}: ${line.sizeLabel}${line.modelLabel ? ' | ' + line.modelLabel : ''}${line.description ? ' | ' + line.description : ''}`).join(' || '),
     observacoes: quoteState.notes || '',
+    cupom: quoteState.couponCode || '',
+    desconto_cupom: quoteState.couponDiscount || 0,
     status: 'Novo'
   };
 }
@@ -2048,11 +2089,18 @@ function calculateQuote() {
   });
 
   const comboApplies = !needsManual && quoteState.items.length >= COMBO_RULES.min_items && COMBO_RULES.discount > 0;
-  const finalPrice = Math.max(0, subtotal - (comboApplies ? COMBO_RULES.discount : 0));
+  const afterCombo = Math.max(0, subtotal - (comboApplies ? COMBO_RULES.discount : 0));
+  const coupon = COUPONS[quoteState.couponCode] || null;
+  const couponAmt = (!needsManual && coupon) ? Math.round(afterCombo * coupon.percent / 100 / 10) * 10 : 0;
+  quoteState.couponDiscount = couponAmt;
+  const finalPrice = Math.max(0, afterCombo - couponAmt);
   quoteState.price = finalPrice;
   quoteState.needsManual = needsManual;
   quoteState.lines = lines;
   quoteState.comboApplies = comboApplies;
+
+  const couponSection = document.getElementById('couponSection');
+  if (couponSection) couponSection.style.display = needsManual ? 'none' : 'block';
 
   document.getElementById('quotePrice').textContent = needsManual ? 'Sob avaliação' : formatBRL(finalPrice);
   document.getElementById('quoteResultText').textContent = needsManual
@@ -2099,6 +2147,7 @@ function calculateQuote() {
     ${summaryLines}
     <li>Condição geral: ${condition.label}</li>
     ${comboApplies ? `<li class="quote-combo-line">${COMBO_RULES.label}: -${formatBRL(COMBO_RULES.discount)}</li>` : ''}
+    ${couponAmt > 0 ? `<li class="coupon-discount-line">Cupom ${quoteState.couponCode}: -${formatBRL(couponAmt)}</li>` : ''}
     <li>Local: ${quoteState.city || 'não informado'}</li>
   `;
 
@@ -2109,6 +2158,30 @@ function calculateQuote() {
   if (confirmBtn) confirmBtn.style.display = 'inline-flex';
   if (secondaryActions) secondaryActions.style.display = 'none';
   updateWhatsappLinks();
+}
+
+function applyCoupon() {
+  const input = document.getElementById('couponInput');
+  const statusEl = document.getElementById('couponStatus');
+  const code = (input?.value || '').trim().toUpperCase();
+  const coupon = COUPONS[code];
+  if (!code) {
+    statusEl.textContent = 'Digite um código de cupom.';
+    statusEl.className = 'coupon-status err';
+    return;
+  }
+  if (!coupon) {
+    statusEl.textContent = 'Cupom inválido ou expirado.';
+    statusEl.className = 'coupon-status err';
+    quoteState.couponCode = '';
+    quoteState.couponDiscount = 0;
+    calculateQuote();
+    return;
+  }
+  quoteState.couponCode = code;
+  statusEl.textContent = `✓ Cupom aplicado: ${coupon.label}`;
+  statusEl.className = 'coupon-status ok';
+  calculateQuote();
 }
 
 document.querySelectorAll('[data-quote-app] .quote-options').forEach(group => {
@@ -2130,5 +2203,9 @@ window.addEventListener('resize', () => {
   }
 });
 </script>
+
+<a href="https://wa.me/5547997545892?text=Olá!%20Gostaria%20de%20um%20orçamento%20da%20Bez%20Clean." target="_blank" class="whatsapp-float" aria-label="Falar pelo WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 32 32" fill="white"><path d="M16 0C7.163 0 0 7.163 0 16c0 2.82.737 5.469 2.027 7.773L0 32l8.469-2.004A15.93 15.93 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm8.279 22.098c-.344.967-2.003 1.846-2.752 1.962-.7.108-1.587.153-2.561-.161-.591-.19-1.35-.443-2.322-.868-4.085-1.763-6.754-5.882-6.959-6.154-.197-.272-1.613-2.146-1.613-4.093 0-1.948 1.02-2.908 1.381-3.307.344-.39.752-.487.997-.487.246 0 .492.002.707.013.226.012.531-.086.829.632.308.738 1.046 2.548 1.138 2.733.09.185.152.4.03.646-.12.246-.183.4-.364.614-.182.215-.381.48-.544.644-.182.185-.37.385-.16.756.21.37.937 1.543 2.011 2.499 1.381 1.231 2.548 1.611 2.916 1.795.369.184.584.153.8-.092.215-.246.92-1.073 1.166-1.442.244-.369.491-.307.829-.184.337.122 2.139 1.008 2.508 1.193.369.184.614.276.706.43.09.152.09.88-.254 1.87z"/></svg>
+</a>
 </body>
 </html>
