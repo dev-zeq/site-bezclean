@@ -1,0 +1,94 @@
+{
+  "name": "Bez Clean — Orçamento pelo Site",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "24bce108-ac23-4ea4-a62c-441d4c31c834",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -200,
+        0
+      ],
+      "id": "96dd903b-d99e-4024-9ef9-fa6d61f30c0e",
+      "name": "Receber Orçamento",
+      "webhookId": "8639c671-a7cc-40c6-b14e-db64de3f7a1f"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://evolution-go:8080/send/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "7c5611cb-ca7f-409d-b8c9-2586f5435014"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"number\": \"{{$json.body.whatsapp}}\", \"text\": \"Olá, {{$json.body.nome}}! 👋 Aqui é da Bez Clean 🧼\\n\\nRecebemos seu orçamento e já estamos prontos para atender!\\n\\n📋 *Serviço:* {{$json.body.itens}}\\n📍 *Cidade:* {{$json.body.cidade}}\\n💰 *Valor estimado:* R$ {{$json.body.valor}}\\n🔧 *Condição:* {{$json.body.condicao}}\\n\\nPara confirmarmos o agendamento, envie uma *foto do estofado* por aqui 📸\\n\\nEm breve entraremos em contato! 🤝\"}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -200,
+        -220
+      ],
+      "id": "fa5b2f6b-57a2-4d8a-8b7b-d8296ac45827",
+      "name": "Enviar WhatsApp",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/AKfycbwKLh-wQGCDpNYgNTz19ZZq86EbC2OqmUp1XTnlvw9PHj57zvnLUlhvc0f_SLKJPhSbbw/exec",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"nome\": \"{{$json.body.nome}}\", \"whatsapp\": \"{{$json.body.whatsapp}}\", \"cidade\": \"{{$json.body.cidade}}\", \"itens\": \"{{$json.body.itens}}\", \"valor\": \"{{$json.body.valor}}\", \"condicao\": \"{{$json.body.condicao}}\", \"acao\": \"{{$json.body.acao}}\", \"observacoes\": \"{{$json.body.observacoes}}\", \"origem\": \"site_orcamento\", \"status\": \"Novo\"}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        160,
+        0
+      ],
+      "id": "c3da4431-930d-45c3-bacf-bcdeb32afaff",
+      "name": "Salvar no Google Sheets",
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Receber Orçamento": {
+      "main": [
+        [
+          {
+            "node": "Enviar WhatsApp",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Salvar no Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
