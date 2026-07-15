@@ -272,6 +272,8 @@ tailwind.config = {
   .quote-result { padding: 26px 22px; position: sticky; top: 84px; }
   .quote-result-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #38E1D4; margin-bottom: 6px; }
   .quote-price { font-weight: 800; font-size: 2.4rem; letter-spacing: -.02em; margin-bottom: 8px; background: linear-gradient(100deg, #38E1D4, #2BA8FF); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .quote-price-original { font-size: 1.1rem; font-weight: 600; text-decoration: line-through; color: rgba(159,180,194,.6); -webkit-text-fill-color: rgba(159,180,194,.6); margin-right: 8px; }
+  .quote-winter-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(43,168,255,.14); border: 1px solid rgba(43,168,255,.35); color: #7FD4FF; font-size: .72rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; margin-bottom: 8px; }
   .quote-result > p { color: rgba(159,180,194,.85); font-size: .85rem; margin-bottom: 14px; }
   .quote-warning { display: none; background: rgba(255,193,7,.1); border: 1px solid rgba(255,193,7,.35); color: #FFD466; font-size: .82rem; border-radius: 14px; padding: 10px 12px; margin-bottom: 14px; }
   .quote-warning.active { display: block; }
@@ -635,6 +637,7 @@ tailwind.config = {
 
     <aside class="quote-result glass rounded-blob shadow-glass sr sr-d1">
       <div class="quote-result-label">Valor</div>
+      <span class="quote-winter-badge" id="quoteWinterBadge" style="display:none;">🥶 Oferta de Inverno · -20%</span>
       <div class="quote-price font-display" id="quotePrice">—</div>
       <p id="quoteResultText">Selecione os itens para calcular o valor do serviço. A confirmação será enviada pelo WhatsApp.</p>
       <div class="quote-warning" id="quoteWarning"></div>
@@ -1155,11 +1158,12 @@ let CONDITION_RULES = {
   pesado: { label: 'Sujeira pesada / manchas / odor', multiplier: 1.35 }
 };
 let COMBO_RULES = { min_items: 2, discount: 30, label: 'Desconto combo' };
+let WINTER_OFFER = { active: true, percent: 20, label: '🥶 Oferta de Inverno' };
 const FREE_REGION_TERMS = ['balneario camboriu', 'balneário camboriú', 'bc', 'camboriu', 'camboriú', 'itajai', 'itajaí', 'itapema', 'navegantes', 'porto belo', 'picarras', 'piçarras'];
 const COUPONS = {
   'PRIMEIRA': { percent: 10, label: '10% — primeira higienização' }
 };
-let quoteState = { step: 0, items: [], details: {}, condition: '', city: '', notes: '', price: null, needsManual: false, lines: [], couponCode: '', couponDiscount: 0 };
+let quoteState = { step: 0, items: [], details: {}, condition: '', city: '', notes: '', price: null, needsManual: false, lines: [], couponCode: '', couponDiscount: 0, winterDiscount: 0 };
 
 function normalizeText(text) {
   return (text || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
@@ -1418,6 +1422,7 @@ function buildWhatsappMessage(mode = 'confirm') {
   ).join('%0A');
   const priceLine = quoteState.needsManual ? 'Valor informado no site: sob avaliação' : `Valor informado no site: ${formatBRL(quoteState.price || 0)}`;
   const comboLine = quoteState.comboApplies ? `%0A${COMBO_RULES.label}: -${formatBRL(COMBO_RULES.discount)}` : '';
+  const winterLine = quoteState.winterApplies && quoteState.winterDiscount > 0 ? `%0A${WINTER_OFFER.label}: -${formatBRL(quoteState.winterDiscount)}` : '';
   const couponLine = quoteState.couponDiscount > 0 ? `%0ACupom ${quoteState.couponCode}: -${formatBRL(quoteState.couponDiscount)}` : '';
   const intro = mode === 'photo'
     ? '*Olá! Preenchi o orçamento da Bez Clean e vou enviar uma foto para confirmação.*'
@@ -1432,7 +1437,7 @@ function buildWhatsappMessage(mode = 'confirm') {
     `Itens:%0A${whatsappLines || '• não informado'}%0A%0A` +
     `Condição geral: ${condition.label}%0A` +
     `Cidade/bairro: ${quoteState.city || 'não informado'}%0A` +
-    `${priceLine}${comboLine}${couponLine}%0A` +
+    `${priceLine}${comboLine}${winterLine}${couponLine}%0A` +
     `${quoteState.notes ? `Observações: ${encodeURIComponent(quoteState.notes)}%0A` : ''}` +
     `%0A${encodeURIComponent(finalAsk)}`;
 }
@@ -1471,6 +1476,7 @@ function buildLeadPayload(action = 'confirmar') {
     observacoes: quoteState.notes || '',
     cupom: quoteState.couponCode || '',
     desconto_cupom: quoteState.couponDiscount || 0,
+    desconto_inverno: quoteState.winterDiscount || 0,
     status: 'Novo'
   };
 }
@@ -1573,11 +1579,17 @@ function calculateQuote() {
 
   const comboApplies = !needsManual && quoteState.items.length >= COMBO_RULES.min_items && COMBO_RULES.discount > 0;
   const afterCombo = Math.max(0, subtotal - (comboApplies ? COMBO_RULES.discount : 0));
+  const winterApplies = !needsManual && WINTER_OFFER.active && WINTER_OFFER.percent > 0;
+  const winterAmt = winterApplies ? Math.round(afterCombo * WINTER_OFFER.percent / 100 / 10) * 10 : 0;
+  const afterWinter = Math.max(0, afterCombo - winterAmt);
+  quoteState.winterDiscount = winterAmt;
+  quoteState.winterApplies = winterApplies;
   const coupon = COUPONS[quoteState.couponCode] || null;
-  const couponAmt = (!needsManual && coupon) ? Math.round(afterCombo * coupon.percent / 100 / 10) * 10 : 0;
+  const couponAmt = (!needsManual && coupon) ? Math.round(afterWinter * coupon.percent / 100 / 10) * 10 : 0;
   quoteState.couponDiscount = couponAmt;
-  const finalPrice = Math.max(0, afterCombo - couponAmt);
+  const finalPrice = Math.max(0, afterWinter - couponAmt);
   quoteState.price = finalPrice;
+  quoteState.priceBeforeWinter = afterCombo;
   quoteState.needsManual = needsManual;
   quoteState.lines = lines;
   quoteState.comboApplies = comboApplies;
@@ -1585,7 +1597,13 @@ function calculateQuote() {
   const couponSection = document.getElementById('couponSection');
   if (couponSection) couponSection.style.display = needsManual ? 'none' : 'block';
 
-  document.getElementById('quotePrice').textContent = needsManual ? 'Sob avaliação' : formatBRL(finalPrice);
+  document.getElementById('quotePrice').innerHTML = needsManual
+    ? 'Sob avaliação'
+    : (winterApplies && winterAmt > 0
+      ? `<span class="quote-price-original">${formatBRL(quoteState.priceBeforeWinter)}</span> ${formatBRL(finalPrice)}`
+      : formatBRL(finalPrice));
+  const winterBadge = document.getElementById('quoteWinterBadge');
+  if (winterBadge) winterBadge.style.display = (!needsManual && winterApplies && winterAmt > 0) ? 'inline-flex' : 'none';
   document.getElementById('quoteResultText').textContent = needsManual
     ? 'Este item precisa de confirmação humana. Enviaremos uma mensagem para você responder com uma foto e avaliarmos rapidamente.'
     : 'Valor calculado conforme as informações preenchidas. Se tiver dúvida sobre modelo ou tamanho, envie uma foto para confirmação.';
@@ -1630,6 +1648,7 @@ function calculateQuote() {
     ${summaryLines}
     <li>Condição geral: ${condition.label}</li>
     ${comboApplies ? `<li class="quote-combo-line">${COMBO_RULES.label}: -${formatBRL(COMBO_RULES.discount)}</li>` : ''}
+    ${winterApplies && winterAmt > 0 ? `<li class="quote-combo-line">${WINTER_OFFER.label}: -${formatBRL(winterAmt)}</li>` : ''}
     ${couponAmt > 0 ? `<li class="coupon-discount-line">Cupom ${quoteState.couponCode}: -${formatBRL(couponAmt)}</li>` : ''}
     <li>Local: ${quoteState.city || 'não informado'}</li>
   `;
