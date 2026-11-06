@@ -1489,11 +1489,7 @@ function calculateQuote() {
   if (couponSection) couponSection.style.display = 'none';
 
   document.getElementById('quotePrice').textContent = 'WhatsApp';
-  const winterBadge = document.getElementById('quoteWinterBadge');
-  if (winterBadge) winterBadge.style.display = (!needsManual && winterApplies && winterAmt > 0) ? 'inline-flex' : 'none';
-  document.getElementById('quoteResultText').textContent = needsManual
-    ? 'Este item precisa de confirmação humana. Enviaremos uma mensagem para você responder com uma foto e avaliarmos rapidamente.'
-    : 'Valor calculado conforme as informações preenchidas. Se tiver dúvida sobre modelo ou tamanho, envie uma foto para confirmação.';
+  document.getElementById('quoteResultText').textContent = 'Seu resumo fica pronto para enviar. A equipe avalia os detalhes e responde com o orçamento.';
 
   // ── PARCELAMENTO ──
   const installmentsEl = document.getElementById('quoteInstallments');
