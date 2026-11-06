@@ -1296,7 +1296,7 @@ function renderDetails() {
       <div>
         <label class="quote-field-label">Tipo do sofá</label>
         <select class="quote-field" data-detail-field="model" data-item="${itemKey}">
-          ${getSofaModelOptions().map(([key, opt]) => `<option value="${key}" ${detail.model === key ? 'selected' : ''}>${opt.label}${opt.addition ? ' +' + formatBRL(opt.addition) : ''}</option>`).join('')}
+          ${getSofaModelOptions().map(([key, opt]) => `<option value="${key}" ${detail.model === key ? 'selected' : ''}>${opt.label}</option>`).join('')}
         </select>
       </div>` : '';
     const sofaHelper = itemKey === 'sofa' ? getSofaHelper(modelKey) : '';
